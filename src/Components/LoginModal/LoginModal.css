@@ -1,0 +1,9 @@
+.ant-modal-title {
+	font-size: 30px;
+	padding-bottom: 10px;
+}
+
+:where(.css-dev-only-do-not-override-1me4733).ant-modal .ant-modal-title {
+	font-size: 30px;
+	padding-bottom: 10px;
+}
