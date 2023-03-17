@@ -45,9 +45,14 @@ const UpperHeader = () => {
 									<a href='#'>Мои объявления</a>
 								</div>
 							</div>
-							<div className='header_item header_button'>
+							<div className='header_button'>
 								<div className='header-services-menu'>
-									<Button type='primary' onClick={() => setVisible(true)}>
+									<Button
+										type='text'
+										style={{ color: 'white' }}
+										id='LoginButton'
+										onClick={() => setVisible(true)}
+									>
 										Войти
 									</Button>
 									<LoginModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} />
