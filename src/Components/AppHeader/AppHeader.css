@@ -47,3 +47,13 @@
 		width: 500px;
 	}
 }
+
+button#LoginButton:where(.css-dev-only-do-not-override-1me4733).ant-btn-primary {
+	background-color: #ffffff00;
+	box-shadow: 0 0 0 0;
+}
+
+button#LoginButton:where(.css-dev-only-do-not-override-1me4733).ant-btn-primary {
+	background-color: #ffffff00;
+	box-shadow: 0 0 0 0;
+}
