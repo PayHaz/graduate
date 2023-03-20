@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './ProductPage.css'
+import { $ } from 'jquery'
 
 const ProductPage = () => {
 	return (
@@ -8,31 +9,69 @@ const ProductPage = () => {
 				<div className='row'>
 					<div className='col-8'>
 						<h1>Название товара</h1>
-						<div className='product__gallery'>
-							<div className='product-gallery'>
-								<div className='product-gallery__featured'>
-									<div className='owl-carousel' id='product-image'>
-										<a href='{$image->filename|resize:800:600}' data-fancybox='gallery'>
-											<img
-												src='https://i.pinimg.com/originals/8a/de/fe/8adefe5af862b4f9cec286c6ee4722cb.jpg'
-												alt='{$product->name|escape}'
-											></img>
-										</a>
-									</div>
+						<div class='outer'>
+							<div id='big' class='owl-carousel owl-theme'>
+								<div class='item'>
+									<h1>1</h1>
 								</div>
-								<div className='product-gallery__carousel'>
-									<div className='owl-carousel' id='product-carousel'>
-										<a
-											href='{$image->filename|resize:800:600}'
-											className='product-gallery__carousel-item'
-										>
-											<img
-												className='product-gallery__carousel-image'
-												src='https://i.pinimg.com/originals/8a/de/fe/8adefe5af862b4f9cec286c6ee4722cb.jpg'
-												alt='{$product->name|escape}'
-											></img>
-										</a>
-									</div>
+								<div class='item'>
+									<h1>2</h1>
+								</div>
+								<div class='item'>
+									<h1>3</h1>
+								</div>
+								<div class='item'>
+									<h1>4</h1>
+								</div>
+								<div class='item'>
+									<h1>5</h1>
+								</div>
+								<div class='item'>
+									<h1>6</h1>
+								</div>
+								<div class='item'>
+									<h1>7</h1>
+								</div>
+								<div class='item'>
+									<h1>8</h1>
+								</div>
+								<div class='item'>
+									<h1>9</h1>
+								</div>
+								<div class='item'>
+									<h1>10</h1>
+								</div>
+							</div>
+							<div id='thumbs' class='owl-carousel owl-theme'>
+								<div class='item'>
+									<h1>1</h1>
+								</div>
+								<div class='item'>
+									<h1>2</h1>
+								</div>
+								<div class='item'>
+									<h1>3</h1>
+								</div>
+								<div class='item'>
+									<h1>4</h1>
+								</div>
+								<div class='item'>
+									<h1>5</h1>
+								</div>
+								<div class='item'>
+									<h1>6</h1>
+								</div>
+								<div class='item'>
+									<h1>7</h1>
+								</div>
+								<div class='item'>
+									<h1>8</h1>
+								</div>
+								<div class='item'>
+									<h1>9</h1>
+								</div>
+								<div class='item'>
+									<h1>10</h1>
 								</div>
 							</div>
 						</div>
