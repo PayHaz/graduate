@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+/* eslint-disable jsx-a11y/alt-text */
+import React from 'react'
 import './ProductPage.css'
-import { $ } from 'jquery'
 
 const ProductPage = () => {
 	return (
@@ -12,10 +12,16 @@ const ProductPage = () => {
 						<div class='outer'>
 							<div id='big' class='owl-carousel owl-theme'>
 								<div class='item'>
-									<h1>1</h1>
+									<img
+										className='product-img'
+										src='https://akt22.ru/upload/iblock/58f/04zgbjpmdvpbwjr31mlo19p0naj29rvf.jpg'
+									></img>
 								</div>
 								<div class='item'>
-									<h1>2</h1>
+									<img
+										className='product-img'
+										src='https://www.championnet.ru/spree/products/132360/original/IMG_1065.JPG?1617084023'
+									></img>
 								</div>
 								<div class='item'>
 									<h1>3</h1>
@@ -44,10 +50,16 @@ const ProductPage = () => {
 							</div>
 							<div id='thumbs' class='owl-carousel owl-theme'>
 								<div class='item'>
-									<h1>1</h1>
+									<img
+										className='product-img'
+										src='https://akt22.ru/upload/iblock/58f/04zgbjpmdvpbwjr31mlo19p0naj29rvf.jpg'
+									></img>
 								</div>
 								<div class='item'>
-									<h1>2</h1>
+									<img
+										className='product-img'
+										src='https://www.championnet.ru/spree/products/132360/original/IMG_1065.JPG?1617084023'
+									></img>
 								</div>
 								<div class='item'>
 									<h1>3</h1>

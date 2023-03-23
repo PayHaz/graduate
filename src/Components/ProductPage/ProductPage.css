@@ -2,12 +2,13 @@
 	max-width: 800px;
 }
 #big .item {
-	background: #ec6e46;
-	padding: 120px 0px;
-	margin: 2px;
-	color: #fff;
+	width: 800px;
 	border-radius: 3px;
 	text-align: center;
+	width: 100%;
+	max-height: 500px;
+	height: 100%;
+	max-width: 800px;
 }
 #thumbs .item {
 	background: #c9c9c9;
@@ -30,7 +31,14 @@
 }
 
 #thumbs .current .item {
-	background: #ff5722;
+	border-radius: 0px;
+	border-width: 1px 1px 1px 1px;
+	height: 100%;
+	width: 100%;
+	max-width: 200px;
+	max-height: 135px;
+	border-color: #333;
+	border-style: solid;
 }
 .owl-theme .owl-nav [class*='owl-'] {
 	-webkit-transition: all 0.3s ease;

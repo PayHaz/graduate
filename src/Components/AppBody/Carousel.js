@@ -1,6 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import './carousel.css'
+import Main1 from './img/MainBanners/MainRent1.jpg'
+import Main2 from './img/MainBanners/MainRent2.jpg'
+import Main3 from './img/MainBanners/MainRent3.jpg'
 
 const Carousel = () => {
 	return (
@@ -19,77 +22,40 @@ const Carousel = () => {
 			</div>
 			<div className='carousel-inner'>
 				<div className='carousel-item active'>
-					<svg
-						className='bd-placeholder-img'
-						width='100%'
-						height='100%'
-						xmlns='http://www.w3.org/2000/svg'
-						aria-hidden='true'
-						preserveAspectRatio='xMidYMid slice'
-						focusable='false'
-					>
-						<rect width='100%' height='100%' fill='#777' />
-					</svg>
+					<img src={Main1}></img>
 
 					<div className='container'>
 						<div className='carousel-caption text-start'>
-							<h1>Example headline.</h1>
-							<p>Some representative placeholder content for the first slide of the carousel.</p>
-							<p>
-								<a className='btn btn-lg btn-primary' href='#'>
-									Sign up today
-								</a>
-							</p>
+							<h1 class='title'>
+								<span>Аренда квартир</span>
+								<br />
+								<span>по выгодным ценам!</span>
+							</h1>
 						</div>
 					</div>
 				</div>
 				<div className='carousel-item'>
-					<svg
-						className='bd-placeholder-img'
-						width='100%'
-						height='100%'
-						xmlns='http://www.w3.org/2000/svg'
-						aria-hidden='true'
-						preserveAspectRatio='xMidYMid slice'
-						focusable='false'
-					>
-						<rect width='100%' height='100%' fill='#777' />
-					</svg>
-
+					<img src={Main2}></img>
 					<div className='container'>
-						<div className='carousel-caption'>
-							<h1>Another example headline.</h1>
-							<p>Some representative placeholder content for the second slide of the carousel.</p>
-							<p>
-								<a className='btn btn-lg btn-primary' href='#'>
-									Learn more
-								</a>
-							</p>
+						<div className='carousel-caption text-end'>
+							<h1 class='title'>
+								<span>Большой выбор</span>
+								<br />
+								<span>Мото и авто техники</span>
+							</h1>
 						</div>
 					</div>
 				</div>
 				<div className='carousel-item'>
-					<svg
-						className='bd-placeholder-img'
-						width='100%'
-						height='100%'
-						xmlns='http://www.w3.org/2000/svg'
-						aria-hidden='true'
-						preserveAspectRatio='xMidYMid slice'
-						focusable='false'
-					>
-						<rect width='100%' height='100%' fill='#777' />
-					</svg>
+					<img src={Main3}></img>
 
 					<div className='container'>
 						<div className='carousel-caption text-end'>
-							<h1>One more for good measure.</h1>
-							<p>Some representative placeholder content for the third slide of this carousel.</p>
-							<p>
-								<a className='btn btn-lg btn-primary' href='#'>
-									Browse gallery
-								</a>
-							</p>
+							<h1 class='title'>
+								<span>Различные виды</span>
+								<br />
+								<span>Спортивного инвентаря</span>
+							</h1>
 						</div>
 					</div>
 				</div>
