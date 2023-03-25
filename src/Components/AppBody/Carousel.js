@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
 import './carousel.css'
@@ -35,7 +36,7 @@ const Carousel = () => {
 					</div>
 				</div>
 				<div className='carousel-item'>
-					<img src={Main2}></img>
+					<img src={Main2} />
 					<div className='container'>
 						<div className='carousel-caption text-end'>
 							<h1 class='title'>

@@ -1,8 +1,39 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
+import { Button } from 'antd'
+import React, { useState } from 'react'
 import './ProductPage.css'
 
 const ProductPage = () => {
+	const [numberVisible, setNumberVisible] = useState(false)
+
+	const onTelButtonClick = () => {
+		setNumberVisible(true)
+	}
+
+	const str = '+79125360484'
+
+	const ButtonTelContent = () => {
+		if (numberVisible)
+			return (
+				<div className='row'>
+					<div className='col-12'>
+						<span>{str}</span>
+					</div>
+				</div>
+			)
+		else
+			return (
+				<div className='row'>
+					<div className='col-12'>
+						<span>Показать телефон</span>
+					</div>
+					<div className='col-12'>
+						<span>{str.substr(0, 5)}XXX-XX-XX</span>
+					</div>
+				</div>
+			)
+	}
+
 	return (
 		<>
 			<div className='container'>
@@ -88,24 +119,39 @@ const ProductPage = () => {
 							</div>
 						</div>
 					</div>
-					<div class='col'>
+					<div className='col'>
 						<h1>17000 ₽ в месяц</h1>
+						<button type='button' class='phone_btn btn btn-primary btn-lg' onClick={onTelButtonClick}>
+							{ButtonTelContent()}
+						</button>
 					</div>
 				</div>
 				<h3>Характеристики</h3>
-				<div className='row'>
-					<div className='col-lg-6'>
-						<p>Год выпуска: 2023</p>
+				<div className='col-lg-8'>
+					<div className='row'>
+						<div className='col-lg-6'>
+							<p>Год выпуска: 2023</p>
+						</div>
+						<div className='col-lg-6'>
+							<p>Привод: Передний</p>
+						</div>
+						<div className='col-lg-6'>
+							<p>Состояние: Не битый</p>
+						</div>
+						<div className='col-lg-6'>
+							<p>Цвет: Чёрный</p>
+						</div>
 					</div>
-					<div className='col-lg-6'>
-						<p>Привод: Передний</p>
-					</div>
-					<div className='col-lg-6'>
-						<p>Состояние: Не битый</p>
-					</div>
-					<div className='col-lg-6'>
-						<p>Цвет: Чёрный</p>
-					</div>
+				</div>
+				<h3>Описание</h3>
+
+				<div className='col-lg-8'>
+					<p>
+						Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является
+						стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный
+						печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки
+						образцов.
+					</p>
 				</div>
 			</div>
 		</>
