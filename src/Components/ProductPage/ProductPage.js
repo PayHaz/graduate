@@ -10,7 +10,7 @@ const ProductPage = () => {
 		setNumberVisible(true)
 	}
 
-	const str = '+79125360484'
+	const str = '+7 (912) 536-04-84'
 
 	const ButtonTelContent = () => {
 		if (numberVisible)
@@ -28,7 +28,7 @@ const ProductPage = () => {
 						<span>Показать телефон</span>
 					</div>
 					<div className='col-12'>
-						<span>{str.substr(0, 5)}XXX-XX-XX</span>
+						<span>{str.substr(0, 8)} XXX-XX-XX</span>
 					</div>
 				</div>
 			)

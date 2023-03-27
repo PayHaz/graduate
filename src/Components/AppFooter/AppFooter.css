@@ -1,5 +1,9 @@
-footer {
-	bottom: 0;
-	left: 0;
-	right: 0;
+html,
+body {
+	height: 100%;
+}
+
+.alig-footer {
+	display: flex;
+	align-items: center;
 }

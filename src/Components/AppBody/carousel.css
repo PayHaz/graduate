@@ -100,3 +100,8 @@
 	padding: 0 10px;
 	background: rgb(255 255 255);
 }
+
+html,
+body {
+	height: 100%;
+}
