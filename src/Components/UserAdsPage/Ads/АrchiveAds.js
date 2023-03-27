@@ -24,44 +24,9 @@ const onLoadCards = [
 		coast: '1000р',
 		key: '3',
 	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '4',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '5',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '6',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '7',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '8',
-	},
 ]
 
-const ActiveAds = () => {
+const АrchiveAds = () => {
 	const [allCards] = useState(onLoadCards)
 
 	const card = allCards.map((el, index) => {
@@ -71,7 +36,7 @@ const ActiveAds = () => {
 					<img src='https://klike.net/uploads/posts/2020-07/1595055001_3.jpg' />
 					<div className='card-body'>
 						<h5 className='card-title'>
-							<a href='/product'>{el.label}</a>
+							<a href='#'>{el.label}</a>
 						</h5>
 						<p className='card-text'>{el.description}</p>
 						<p className='card-text'>{el.coast}</p>
@@ -89,4 +54,4 @@ const ActiveAds = () => {
 	)
 }
 
-export default ActiveAds
+export default АrchiveAds

@@ -119,10 +119,10 @@ const UpperHeader = () => {
 											</div>
 										)}
 									>
-										<a onClick={(e) => e.preventDefault()}>
-											<Space>
+										<a onClick={(e) => e.preventDefault()} style={{ textDecoration: 'none' }}>
+											<Space style={{ color: 'white', textDecoration: 'none' }}>
 												Вася Пупкин
-												<DownOutlined />
+												<DownOutlined style={{ color: 'white' }} />
 											</Space>
 										</a>
 									</Dropdown>

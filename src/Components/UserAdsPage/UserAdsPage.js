@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import ActiveAds from './Ads/ActiveAds'
+import АrchiveAds from './Ads/АrchiveAds'
 
 const onChange = (key) => {
 	console.log(key)
@@ -14,7 +15,7 @@ const items = [
 	{
 		key: '2',
 		label: `Архив`,
-		children: `Архив`,
+		children: <АrchiveAds />,
 	},
 ]
 

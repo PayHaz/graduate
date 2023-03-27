@@ -27,7 +27,7 @@ const Carousel = () => {
 
 					<div className='container'>
 						<div className='carousel-caption text-start'>
-							<h1 class='title'>
+							<h1 className='title'>
 								<span>Аренда квартир</span>
 								<br />
 								<span>по выгодным ценам!</span>
@@ -39,7 +39,7 @@ const Carousel = () => {
 					<img src={Main2} />
 					<div className='container'>
 						<div className='carousel-caption text-end'>
-							<h1 class='title'>
+							<h1 className='title'>
 								<span>Большой выбор</span>
 								<br />
 								<span>Мото и авто техники</span>
@@ -52,7 +52,7 @@ const Carousel = () => {
 
 					<div className='container'>
 						<div className='carousel-caption text-end'>
-							<h1 class='title'>
+							<h1 className='title'>
 								<span>Различные виды</span>
 								<br />
 								<span>Спортивного инвентаря</span>
