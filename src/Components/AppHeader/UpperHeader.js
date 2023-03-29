@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { Button, Divider, Dropdown, Space, theme } from 'antd'
 import './AppHeader.css'
+import { useHistory, useLocation } from 'react-router-dom'
 import LoginModal from '../LoginModal/LoginModal'
 
 const { useToken } = theme
@@ -39,7 +40,10 @@ const UpperHeader = () => {
 	const [visible, setVisible] = useState(false)
 	const [isAuth, setIsAuth] = useState(true)
 
+	const location = useLocation()
+
 	const handleOk = () => {
+		console.log(location)
 		setVisible(false)
 	}
 
@@ -55,6 +59,17 @@ const UpperHeader = () => {
 	}
 	const menuStyle = {
 		boxShadow: 'none',
+	}
+
+	const AddItemButton = () => {
+		if (location.pathname !== '/additem')
+			return (
+				<a href='/additem'>
+					<Button className='ms-3' type='primary'>
+						Разместить объявление
+					</Button>
+				</a>
+			)
 	}
 
 	const onLogoutClick = () => {
@@ -90,7 +105,7 @@ const UpperHeader = () => {
 									</div>
 									<div className='header_item header_button'>
 										<div className='header-services-menu'>
-											<a href='#'>Мои объявления</a>
+											<a href='/ads'>Мои объявления</a>
 										</div>
 									</div>
 									<Dropdown
@@ -126,6 +141,7 @@ const UpperHeader = () => {
 											</Space>
 										</a>
 									</Dropdown>
+									{AddItemButton()}
 								</>
 							) : (
 								<div className='header_button'>

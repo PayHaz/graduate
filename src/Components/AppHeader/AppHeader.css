@@ -67,3 +67,9 @@ button#LoginButton:where(.css-dev-only-do-not-override-1me4733).ant-btn-primary 
 	text-decoration: none;
 	color: #d75f5e;
 }
+
+.site-header__middle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}

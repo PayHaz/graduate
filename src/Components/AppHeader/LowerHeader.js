@@ -1,8 +1,10 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
 import { AutoComplete, Input, Form } from 'antd'
 import { useState } from 'react'
 import './AppHeader.css'
 import { useSelector } from 'react-redux'
+import RentaruLogo from './img/RentaRu.png'
 
 const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min
 const searchResult = (query) =>
@@ -51,12 +53,12 @@ const LowerHeader = () => {
 	return (
 		<div className='container'>
 			<header className='py-3 mb-2 mt-1'>
-				<div className='container d-flex flex-wrap justify-content-center'>
+				<div className='container site-header__middle flex-wrap'>
 					<a
 						href='/'
 						className='d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none'
 					>
-						<span className='fs-4'>Логотип {count}</span>
+						<img src={RentaruLogo} />
 					</a>
 
 					<Form>

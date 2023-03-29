@@ -7,7 +7,7 @@ const Layout = () => {
 	return (
 		<div className='wrapper'>
 			<AppHeader />
-			<div class='content'>
+			<div className='content'>
 				<Outlet />
 			</div>
 
