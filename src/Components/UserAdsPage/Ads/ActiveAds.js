@@ -1,34 +1,35 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Dropdown, Button } from 'antd'
 import '../UserAdsPage.css'
 
-const onLoadCards = [
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '1',
-	},
-	{
-		label: 'Самосвальчик',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '2',
-	},
-	{
-		label: 'Автомобильчик',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '3',
-	},
-]
-
 const ActiveAds = () => {
-	const [allCards] = useState(onLoadCards)
+	const [data, setData] = useState([])
+
+	async function fetchData() {
+		try {
+			const response = await fetch('http://localhost:1337/api/ads')
+			const responseData = await response.json()
+			const formattedData = responseData.data.map((obj) => ({
+				label: obj.attributes.label,
+				status: obj.attributes.status,
+				description: obj.attributes.description,
+				location: obj.attributes.location,
+				coast: obj.attributes.coast,
+				createdAt: obj.attributes.created_at,
+				updatedAt: obj.attributes.updated_at,
+				publishedAt: obj.attributes.published_at,
+				id: obj.id,
+			}))
+			setData(formattedData)
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
 
 	const [selectedItem, setselectedItem] = useState()
 
@@ -51,10 +52,10 @@ const ActiveAds = () => {
 		},
 	]
 
-	const card = allCards.map((el, index) => {
+	const card = data.map((el, index) => {
 		return (
-			<div className='col'>
-				<div key={index} className={index > 2 ? 'card mt-4' : 'card'}>
+			<div className='col' key={index}>
+				<div className={index > 2 ? 'card mt-4' : 'card'}>
 					<img src='https://klike.net/uploads/posts/2020-07/1595055001_3.jpg' />
 					<div className='card-body'>
 						<div className='title__group'>

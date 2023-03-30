@@ -76,7 +76,7 @@ const Cards = () => {
 	const card = allCards.map((el, index) => {
 		return (
 			<div className='col'>
-				<div key={index} className=' card mt-5  '>
+				<div key={index} className='card mt-5'>
 					<Carousel autoplay autoplaySpeed={Math.random() * (6000 - 3000) + 3000}>
 						<div>
 							<h3 style={contentStyle}>1</h3>
