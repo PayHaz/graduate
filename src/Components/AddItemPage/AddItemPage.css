@@ -1,0 +1,8 @@
+.cascader {
+	width: 100%;
+}
+
+.change__category__group {
+	display: flex;
+	flex-direction: column;
+}
