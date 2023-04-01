@@ -90,7 +90,9 @@ const ActiveAds = () => {
 
 	return (
 		<div className='container px-4'>
-			<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>{card}</div>
+			<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>
+				{data.length === 0 ? 'Пока у вас нету активных объявлений' : card}
+			</div>
 		</div>
 	)
 }
