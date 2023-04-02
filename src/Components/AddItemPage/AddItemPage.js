@@ -86,12 +86,19 @@ const AddItemPage = () => {
 	const next = () => {
 		setCurrent(current + 1)
 		setNextStepButton(true)
-		console.log(formData)
 	}
 
 	const onFinish = (values) => {
+		if (current === 1) {
+			setFormData({
+				...formData,
+				name: values.name,
+				description: values.description,
+				characteristics: values.characteristics,
+			})
+		}
+		console.log(formData)
 		next()
-		setNextStepButton(false)
 	}
 
 	useEffect(() => {
@@ -107,57 +114,21 @@ const AddItemPage = () => {
 	}, [])
 
 	const onCategoryChange = (value) => {
-		setCategory(value)
-		if (current === 0 && value) {
-			setNextStepButton(false)
-			setFormData({ ...formData, category: value })
-			setItems((prevItems) => {
-				const newItems = [...prevItems]
-				newItems[1].disabled = false
-				return newItems
-			})
-		}
-		if (value === undefined) {
-			setNextStepButton(true)
-			setItems((prevItems) => {
-				const newItems = [...prevItems]
-				newItems[1].disabled = true
-				return newItems
-			})
-		}
+		setFormData({ ...formData, category: value })
+	}
+
+	const prev = () => {
+		setCurrent(current - 1)
 	}
 
 	const StepContent = () => {
-		const { category, name, characteristics, description } = formData
-		const onInputChange = (e) => {
-			setFormData({ ...formData, [e.target.name]: e.target.value })
-			if (
-				current === 1 &&
-				formData.name !== '' &&
-				formData.characteristics !== '' &&
-				formData.description !== ''
-			) {
-				setNextStepButton(false)
-				setItems((prevItems) => {
-					const newItems = [...prevItems]
-					newItems[2].disabled = false
-					return newItems
-				})
-			} else {
-				setNextStepButton(true)
-				setItems((prevItems) => {
-					const newItems = [...prevItems]
-					newItems[2].disabled = true
-					return newItems
-				})
-			}
-		}
+		const { category, name, description } = formData
 		if (current === 0)
 			return (
 				<Form
 					name='dynamic_form_nest_item'
 					form={formCategory}
-					onFinish={onFinish}
+					onFinish={(values) => onFinish(values)}
 					style={{
 						maxWidth: 600,
 					}}
@@ -178,14 +149,7 @@ const AddItemPage = () => {
 					</Form.Item>
 					<Form.Item shouldUpdate>
 						{() => (
-							<Button
-								type='primary'
-								htmlType='submit'
-								disabled={
-									!formCategory.isFieldsTouched(true) ||
-									!!formCategory.getFieldsError().filter(({ errors }) => errors.length).length
-								}
-							>
+							<Button type='primary' htmlType='submit'>
 								Следующий шаг
 							</Button>
 						)}
@@ -213,7 +177,6 @@ const AddItemPage = () => {
 								type='text'
 								name='name'
 								value={name}
-								onChange={onInputChange}
 								placeholder='Введите название'
 								className='form-control'
 							/>
@@ -221,7 +184,7 @@ const AddItemPage = () => {
 
 						<label>Характеристики:</label>
 
-						<Form.List name='users'>
+						<Form.List name='characteristics'>
 							{(fields, { add, remove }) => (
 								<>
 									{fields.map(({ key, name, ...restField }) => (
@@ -235,7 +198,7 @@ const AddItemPage = () => {
 										>
 											<Form.Item
 												{...restField}
-												name={[name, 'first']}
+												name={[name, 'parameter']}
 												rules={[
 													{
 														required: true,
@@ -247,7 +210,7 @@ const AddItemPage = () => {
 											</Form.Item>
 											<Form.Item
 												{...restField}
-												name={[name, 'last']}
+												name={[name, 'characteristic']}
 												rules={[
 													{
 														required: true,
@@ -276,14 +239,13 @@ const AddItemPage = () => {
 							<Input
 								name='description'
 								value={description}
-								onChange={onInputChange}
 								placeholder='Введите описание'
 								className='form-control'
 							/>
 						</Form.Item>
 
 						<Form.Item shouldUpdate>
-							{() => (
+							{current < steps.length - 1 && (
 								<Button
 									type='primary'
 									htmlType='submit'
@@ -292,12 +254,53 @@ const AddItemPage = () => {
 										!!formDatas.getFieldsError().filter(({ errors }) => errors.length).length
 									}
 								>
-									Следующий шаг
+									Next
+								</Button>
+							)}
+							{current === steps.length - 1 && (
+								<Button type='primary' onClick={() => message.success('Processing complete!')}>
+									Done
+								</Button>
+							)}
+							{current > 0 && (
+								<Button
+									style={{
+										margin: '0 8px',
+									}}
+									onClick={() => prev()}
+								>
+									Previous
 								</Button>
 							)}
 						</Form.Item>
 					</Form>
 				</div>
+			)
+		if (current === 2)
+			return (
+				<>
+					<h1>{formData.name}</h1>
+					{current < steps.length - 1 && (
+						<Button type='primary' onClick={() => next()}>
+							Next
+						</Button>
+					)}
+					{current === steps.length - 1 && (
+						<Button type='primary' onClick={() => message.success('Processing complete!')}>
+							Done
+						</Button>
+					)}
+					{current > 0 && (
+						<Button
+							style={{
+								margin: '0 8px',
+							}}
+							onClick={() => prev()}
+						>
+							Previous
+						</Button>
+					)}
+				</>
 			)
 	}
 
