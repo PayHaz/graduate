@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Divider, Steps, Cascader, Button, message, Input, Form, Space } from 'antd'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import React, { useState } from 'react'
+import { Steps, Button, message, Form, Upload } from 'antd'
 import './AddItemPage.css'
+import FirstStep from './FirstStep'
+import SecondStep from './SecondStep'
 
 const options = [
 	{
@@ -63,20 +64,43 @@ const steps = [
 
 const AddItemPage = () => {
 	const [current, setCurrent] = useState(0)
-	const [category, setCategory] = useState()
-	const [items, setItems] = useState([])
-	const [nextStepButton, setNextStepButton] = useState(true)
-
+	const [fileList, setFileList] = useState([])
 	const [formCategory] = Form.useForm()
-	const [formDatas] = Form.useForm()
-	const [, forceUpdate] = useState({})
+	const [formInform] = Form.useForm()
 
 	const [formData, setFormData] = useState({
 		category: null,
 		name: '',
 		characteristics: [],
 		description: '',
+		images: [],
 	})
+
+	const handleChange = ({ fileList: newFileList }) => {
+		setFileList(newFileList.slice(0, 10))
+	}
+
+	const handleUpload = () => {
+		setFormData({ ...formData, images: fileList })
+		console.log(fileList)
+		fetch('/api/upload', {
+			method: 'POST',
+			body: {
+				name: formData.name,
+				images: formData.images,
+			},
+		})
+			.then((response) => {
+				if (response.ok) {
+					message.success('Images uploaded successfully')
+				} else {
+					message.error('Failed to upload images')
+				}
+			})
+			.catch((error) => {
+				message.error('Failed to upload images')
+			})
+	}
 
 	const onChange = (value) => {
 		setCurrent(value)
@@ -85,10 +109,12 @@ const AddItemPage = () => {
 
 	const next = () => {
 		setCurrent(current + 1)
-		setNextStepButton(true)
 	}
 
 	const onFinish = (values) => {
+		if (current === 0) {
+			setFormData({ ...formData, category: values })
+		}
 		if (current === 1) {
 			setFormData({
 				...formData,
@@ -101,185 +127,41 @@ const AddItemPage = () => {
 		next()
 	}
 
-	useEffect(() => {
-		setItems(
-			steps.map((item) => ({
-				key: item.title,
-				title: item.title,
-				description: item.description,
-				disabled: item.disabled,
-			}))
-		)
-		forceUpdate({})
-	}, [])
-
-	const onCategoryChange = (value) => {
-		setFormData({ ...formData, category: value })
-	}
-
 	const prev = () => {
 		setCurrent(current - 1)
 	}
 
 	const StepContent = () => {
-		const { category, name, description } = formData
+		const { category } = formData
 		if (current === 0)
-			return (
-				<Form
-					name='dynamic_form_nest_item'
-					form={formCategory}
-					onFinish={(values) => onFinish(values)}
-					style={{
-						maxWidth: 600,
-					}}
-					autoComplete='off'
-				>
-					<Form.Item
-						name='category'
-						label='Категория'
-						rules={[{ required: true, message: 'Пожалуйста, выберите категорию' }]}
-					>
-						<Cascader
-							options={options}
-							value={category}
-							onChange={onCategoryChange}
-							placeholder='Выберите категорию'
-							className='cascader'
-						/>
-					</Form.Item>
-					<Form.Item shouldUpdate>
-						{() => (
-							<Button type='primary' htmlType='submit'>
-								Следующий шаг
-							</Button>
-						)}
-					</Form.Item>
-				</Form>
-			)
+			return <FirstStep formCategory={formCategory} onFinish={onFinish} options={options} category={category} />
 		if (current === 1)
 			return (
-				<div>
-					<Form
-						name='dynamic_form_nest_item'
-						onFinish={onFinish}
-						style={{
-							maxWidth: 600,
-						}}
-						form={formDatas}
-						autoComplete='off'
-					>
-						<Form.Item
-							name='name'
-							label='Название:'
-							rules={[{ required: true, message: 'Пожалуйста, введите название' }]}
-						>
-							<Input
-								type='text'
-								name='name'
-								value={name}
-								placeholder='Введите название'
-								className='form-control'
-							/>
-						</Form.Item>
-
-						<label>Характеристики:</label>
-
-						<Form.List name='characteristics'>
-							{(fields, { add, remove }) => (
-								<>
-									{fields.map(({ key, name, ...restField }) => (
-										<Space
-											key={key}
-											style={{
-												display: 'flex',
-												marginBottom: 8,
-											}}
-											align='baseline'
-										>
-											<Form.Item
-												{...restField}
-												name={[name, 'parameter']}
-												rules={[
-													{
-														required: true,
-														message: 'Missing first name',
-													},
-												]}
-											>
-												<Input placeholder='Введите параметр' />
-											</Form.Item>
-											<Form.Item
-												{...restField}
-												name={[name, 'characteristic']}
-												rules={[
-													{
-														required: true,
-														message: 'Missing last name',
-													},
-												]}
-											>
-												<Input placeholder='Введите характеристику' />
-											</Form.Item>
-											<MinusCircleOutlined onClick={() => remove(name)} />
-										</Space>
-									))}
-									<Form.Item>
-										<Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />}>
-											Add field
-										</Button>
-									</Form.Item>
-								</>
-							)}
-						</Form.List>
-						<Form.Item
-							name='description'
-							label='Описание:'
-							rules={[{ required: true, message: 'Пожалуйста, введите описание' }]}
-						>
-							<Input
-								name='description'
-								value={description}
-								placeholder='Введите описание'
-								className='form-control'
-							/>
-						</Form.Item>
-
-						<Form.Item shouldUpdate>
-							{current < steps.length - 1 && (
-								<Button
-									type='primary'
-									htmlType='submit'
-									disabled={
-										!formDatas.isFieldsTouched(true) ||
-										!!formDatas.getFieldsError().filter(({ errors }) => errors.length).length
-									}
-								>
-									Next
-								</Button>
-							)}
-							{current === steps.length - 1 && (
-								<Button type='primary' onClick={() => message.success('Processing complete!')}>
-									Done
-								</Button>
-							)}
-							{current > 0 && (
-								<Button
-									style={{
-										margin: '0 8px',
-									}}
-									onClick={() => prev()}
-								>
-									Previous
-								</Button>
-							)}
-						</Form.Item>
-					</Form>
-				</div>
+				<SecondStep
+					formInform={formInform}
+					onFinish={onFinish}
+					current={current}
+					formData={formData}
+					steps={steps}
+					prev={prev}
+				/>
 			)
 		if (current === 2)
 			return (
 				<>
-					<h1>{formData.name}</h1>
+					<div>
+						<Upload
+							action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+							listType='picture-card'
+							fileList={fileList}
+							onChange={handleChange}
+							onRemove={() => false}
+						>
+							{fileList.length < 10 && '+ Upload'}
+						</Upload>
+						<Button onClick={handleUpload}>Отправить данные на проверку</Button>
+					</div>
+
 					{current < steps.length - 1 && (
 						<Button type='primary' onClick={() => next()}>
 							Next
@@ -304,11 +186,16 @@ const AddItemPage = () => {
 			)
 	}
 
+	const onBtnClick = (e) => {
+		e.preventDefault()
+		console.log(formData)
+	}
+
 	return (
 		<div className='container'>
 			<div className='row'>
 				<h1>Новое объявление</h1>
-				<Steps current={current} onChange={onChange} items={items} />
+				<Steps current={current} onChange={onChange} items={steps} />
 				<div className='pt-5 change__category__group'>
 					{StepContent()}
 
@@ -317,6 +204,9 @@ const AddItemPage = () => {
 							Done
 						</Button>
 					)}
+					<Button type='primary' onClick={onBtnClick}>
+						Test
+					</Button>
 				</div>
 			</div>
 		</div>
