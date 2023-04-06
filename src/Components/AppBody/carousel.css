@@ -105,3 +105,27 @@ html,
 body {
 	height: 100%;
 }
+
+.category__element {
+	text-decoration: none;
+	color: #00a8f4;
+}
+
+a.category__element:hover {
+	text-decoration: none;
+	color: #ff0000;
+}
+
+a.card__title {
+	text-decoration: none;
+	color: #1ea8f2;
+}
+
+a.card__title:hover {
+	text-decoration: none;
+	color: #ff0000;
+}
+
+body {
+	font-family: 'Golos Text', sans-serif;
+}

@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react'
+import './carousel.css'
 
 const onLoadCategories = [
 	{ label: 'Все категории', key: '1' },
@@ -17,7 +18,9 @@ const Category = () => {
 	const Cat = categories.map((el) => {
 		return (
 			<div key={el.key} className={el.key > 5 ? 'col category pt-2' : 'col category'}>
-				<a href='/'>{el.label}</a>
+				<a className='category__element' href='/'>
+					{el.label}
+				</a>
 			</div>
 		)
 	})

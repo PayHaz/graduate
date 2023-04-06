@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState } from 'react'
 import { Carousel } from 'antd'
+import './carousel.css'
 
 const contentStyle = {
 	margin: 0,
@@ -92,7 +93,11 @@ const Cards = () => {
 						</div>
 					</Carousel>
 					<div className='card-body'>
-						<h5 className='card-title'>{el.label}</h5>
+						<h5 className='card-title'>
+							<a href='/' className='card__title'>
+								{el.label}
+							</a>
+						</h5>
 						<p className='card-text'>{el.description}</p>
 						<p className='card-text'>{el.coast}</p>
 						<p className='card-text'>{el.location}</p>
