@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Steps, Button, message, Form, Upload } from 'antd'
+import { Steps, Button, message, Form, Upload, Modal } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 import './AddItemPage.css'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
@@ -39,6 +40,14 @@ const options = [
 	},
 ]
 
+const getBase64 = (file) =>
+	new Promise((resolve, reject) => {
+		const reader = new FileReader()
+		reader.readAsDataURL(file)
+		reader.onload = () => resolve(reader.result)
+		reader.onerror = (error) => reject(error)
+	})
+
 const steps = [
 	{
 		title: 'Шаг 1',
@@ -64,6 +73,9 @@ const steps = [
 
 const AddItemPage = () => {
 	const [current, setCurrent] = useState(0)
+	const [previewOpen, setPreviewOpen] = useState(false)
+	const [previewImage, setPreviewImage] = useState('')
+	const [previewTitle, setPreviewTitle] = useState('')
 	const [fileList, setFileList] = useState([])
 	const [formCategory] = Form.useForm()
 	const [formInform] = Form.useForm()
@@ -81,24 +93,46 @@ const AddItemPage = () => {
 	}
 
 	const handleUpload = () => {
-		setFormData({ ...formData, images: fileList })
-		console.log(fileList)
-		fetch('/api/upload', {
+		const formData = new FormData()
+		fileList.forEach((file) => {
+			formData.append('files', file.originFileObj)
+		})
+
+		fetch('http://localhost:1337/api/upload', {
 			method: 'POST',
-			body: {
-				name: formData.name,
-				images: formData.images,
-			},
+			body: formData,
 		})
 			.then((response) => {
 				if (response.ok) {
-					message.success('Images uploaded successfully')
+					return response.json()
 				} else {
-					message.error('Failed to upload images')
+					throw new Error('Failed to upload images')
 				}
 			})
+			.then((data) => {
+				const adData = {
+					images: data.map((file) => ({ url: file.url })),
+				}
+				fetch('http://localhost:1337/api/ads', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(adData),
+				})
+					.then((response) => {
+						if (response.ok) {
+							message.success('Ad created successfully')
+						} else {
+							throw new Error('Failed to create ad')
+						}
+					})
+					.catch((error) => {
+						message.error(error.message)
+					})
+			})
 			.catch((error) => {
-				message.error('Failed to upload images')
+				message.error(error.message)
 			})
 	}
 
@@ -131,6 +165,28 @@ const AddItemPage = () => {
 		setCurrent(current - 1)
 	}
 
+	const handleCancel = () => setPreviewOpen(false)
+	const handlePreview = async (file) => {
+		if (!file.url && !file.preview) {
+			file.preview = await getBase64(file.originFileObj)
+		}
+		setPreviewImage(file.url || file.preview)
+		setPreviewOpen(true)
+		setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
+	}
+	const uploadButton = (
+		<div>
+			<PlusOutlined />
+			<div
+				style={{
+					marginTop: 8,
+				}}
+			>
+				Upload
+			</div>
+		</div>
+	)
+
 	const StepContent = () => {
 		const { category } = formData
 		if (current === 0)
@@ -149,19 +205,27 @@ const AddItemPage = () => {
 		if (current === 2)
 			return (
 				<>
+					<h3>Загрузите фотографии:</h3>
 					<div>
 						<Upload
-							action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+							action='http://localhost:1337/api/upload'
 							listType='picture-card'
 							fileList={fileList}
+							onPreview={handlePreview}
 							onChange={handleChange}
-							onRemove={() => false}
 						>
-							{fileList.length < 10 && '+ Upload'}
+							{fileList.length >= 8 ? null : uploadButton}
 						</Upload>
-						<Button onClick={handleUpload}>Отправить данные на проверку</Button>
+						<Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+							<img
+								alt='example'
+								style={{
+									width: '100%',
+								}}
+								src={previewImage}
+							/>
+						</Modal>
 					</div>
-
 					{current < steps.length - 1 && (
 						<Button type='primary' onClick={() => next()}>
 							Next
@@ -186,11 +250,6 @@ const AddItemPage = () => {
 			)
 	}
 
-	const onBtnClick = (e) => {
-		e.preventDefault()
-		console.log(formData)
-	}
-
 	return (
 		<div className='container'>
 			<div className='row'>
@@ -204,9 +263,6 @@ const AddItemPage = () => {
 							Done
 						</Button>
 					)}
-					<Button type='primary' onClick={onBtnClick}>
-						Test
-					</Button>
 				</div>
 			</div>
 		</div>
