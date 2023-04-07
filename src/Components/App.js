@@ -17,6 +17,7 @@ const App = () => {
 				theme={{
 					token: {
 						fontFamily: 'Golos Text',
+						colorPrimary: '#00aaff',
 					},
 				}}
 			>
