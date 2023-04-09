@@ -9,6 +9,7 @@ import ProductPage from './ProductPage/ProductPage'
 import UserAdsPage from './UserAdsPage/UserAdsPage'
 import AddItemPage from './AddItemPage/AddItemPage'
 import { ConfigProvider } from 'antd'
+import SearchPage from './SearchPage/SearchPage'
 
 const App = () => {
 	return (
@@ -29,6 +30,7 @@ const App = () => {
 							<Route path='product' element={<ProductPage />} />
 							<Route path='ads' element={<UserAdsPage />} />
 							<Route path='additem' element={<AddItemPage />} />
+							<Route path='search' element={<SearchPage />} />
 						</Route>
 					</Routes>
 				</Provider>
