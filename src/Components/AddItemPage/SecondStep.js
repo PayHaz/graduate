@@ -1,10 +1,53 @@
 import React from 'react'
-import { Form, Input, Button, Space } from 'antd'
+import { Form, Input, Button, Space, Select, InputNumber } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { Checkbox } from 'antd'
+
+const { Option } = Select
+
+const options = [
+	{
+		value: 'N',
+		label: 'рублей',
+	},
+	{
+		value: 'S',
+		label: 'за услугу',
+	},
+	{
+		value: 'H',
+		label: 'за час',
+	},
+	{
+		value: 'U',
+		label: 'за единицу',
+	},
+	{
+		value: 'D',
+		label: 'за день',
+	},
+	{
+		value: 'MT',
+		label: 'за месяц',
+	},
+	{
+		value: 'M2',
+		label: 'за м^2',
+	},
+	{
+		value: 'M',
+		label: 'за метр',
+	},
+]
 
 const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) => {
 	const { name, description } = formData
 	const { TextArea } = Input
+
+	const onChange = (value) => {
+		console.log('changed', value)
+	}
+
 	return (
 		<div>
 			<h3>Введите данные о товаре:</h3>
@@ -95,6 +138,35 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 						className='form-control'
 						maxLength={1000}
 					/>
+				</Form.Item>
+
+				<Form.Item
+					name='description'
+					label='Описание:'
+					rules={[{ required: true, message: 'Пожалуйста, введите описание' }]}
+				>
+					<TextArea
+						name='description'
+						value={description}
+						placeholder='Введите описание'
+						className='form-control'
+						maxLength={1000}
+					/>
+				</Form.Item>
+
+				<Form.Item
+					name='price'
+					label='Стоимость:'
+					rules={[{ required: true, message: 'Пожалуйста, введите стоимость' }]}
+				>
+					<Space.Compact>
+						<InputNumber defaultValue={100} style={{ width: '200px' }} />
+						<Select defaultValue='рублей' options={options} />
+					</Space.Compact>
+				</Form.Item>
+
+				<Form.Item name='is_lower_bound'>
+					<Checkbox>Это начальная стоимость</Checkbox>
 				</Form.Item>
 
 				<Form.Item shouldUpdate>

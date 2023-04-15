@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TreeSelect, Slider, Button, Form, Carousel } from 'antd'
 import './SerachPage.css'
 
@@ -117,6 +117,7 @@ const SearchPage = () => {
 	const [value, setValue] = useState()
 	const [inputValue, setInputValue] = useState(0)
 	const [allCards] = useState(onLoadCards)
+	const [data, setData] = useState([])
 	const onChange = (newValue) => {
 		setValue(newValue)
 	}
@@ -128,6 +129,21 @@ const SearchPage = () => {
 		setInputValue(value)
 		console.log(value)
 	}
+
+	async function fetchData() {
+		try {
+			const response = await fetch('http://localhost:8000/category/tree')
+			const responseData = await response.json()
+			console.log(responseData)
+			setData(responseData)
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
 
 	const card = allCards.map((el, index) => {
 		return (
@@ -186,17 +202,17 @@ const SearchPage = () => {
 										allowClear
 										treeDefaultExpandAll
 										onChange={onChange}
-										treeData={treeData}
+										treeData={data}
 									/>
 								</Form.Item>
 							</div>
-							<div className='pt-3'>
+							<div>
 								<p className='category__selector__label'>Цена:</p>
 								<Form.Item>
 									<Slider onChange={onSliderChange} range marks={marks} defaultValue={[0, 100]} />
 								</Form.Item>
 							</div>
-							<div className='pt-3 filter__button'>
+							<div className=' filter__button'>
 								<Form.Item>
 									<Button type='primary'>Применить</Button>
 								</Form.Item>

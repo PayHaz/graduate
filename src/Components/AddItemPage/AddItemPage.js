@@ -85,6 +85,9 @@ const AddItemPage = () => {
 		name: '',
 		characteristics: [],
 		description: '',
+		is_lower_bound: false,
+		PriceSuffix: 'N',
+		Price: '',
 		images: [],
 	})
 
@@ -155,6 +158,8 @@ const AddItemPage = () => {
 				name: values.name,
 				description: values.description,
 				characteristics: values.characteristics,
+				PriceSuffix: values.priceSuffix,
+				Price: values.price,
 			})
 		}
 		console.log(formData)
