@@ -3,25 +3,56 @@
 import React, { useState } from 'react'
 import { Modal, Form, Input, Button, Checkbox, Typography } from 'antd'
 import './LoginModal.css'
+import { useSelector, useDispatch } from 'react-redux'
 import RegistrationModal from '../RegistrationModal/RegistrationModal'
 import styles from './LoginModal.less'
+import { setToken, deleteToken } from '../../features/session/sessionSlice'
+import Cookies from 'js-cookie'
 
 const { Text } = Typography
 
 const LoginModal = ({ visible, handleOk, handleCancel }) => {
 	const [form] = Form.useForm()
+	const session = useSelector((state) => state.session.value)
+	const dispatch = useDispatch()
 	const [loading, setLoading] = useState(false)
 	const [rememberPassword, setRememberPassword] = useState(false)
 	const [RegistrationVisible, setRegistrationVisible] = useState(false)
 	const [isMainModel, setMainModel] = useState(false)
 	const [isSubModel, setSubModel] = useState(false)
 
-	const onFinish = (values) => {
+	const onFinish1 = (values) => {
 		setLoading(true)
 		setTimeout(() => {
 			setLoading(false)
 			handleOk()
 		}, 2000)
+	}
+
+	const onFinish = async (values) => {
+		const response = await fetch('http://localhost:8000/api/token/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(values),
+		})
+		const data = await response.json()
+		console.log(data.access)
+		setLoading(true)
+		setTimeout(() => {
+			if (response.status === 200) {
+				console.log('Authorization successful!')
+				console.log(data.access)
+				setLoading(false)
+				Cookies.set('token', data.access)
+				dispatch(setToken(data.access))
+				handleOk() // JWT-токен
+			} else {
+				console.log('Authorization failed!')
+				setLoading(false)
+			}
+		})
 	}
 
 	const onSubModel = (e, stateSub = true, stateMain = false) => {

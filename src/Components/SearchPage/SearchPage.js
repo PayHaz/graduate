@@ -134,7 +134,6 @@ const SearchPage = () => {
 		try {
 			const response = await fetch('http://localhost:8000/category/tree')
 			const responseData = await response.json()
-			console.log(responseData)
 			setData(responseData)
 		} catch (error) {
 			console.error(error)
@@ -198,7 +197,7 @@ const SearchPage = () => {
 											maxHeight: 400,
 											overflow: 'auto',
 										}}
-										placeholder='Please select'
+										placeholder='Пожалуйста, выберите категорию'
 										allowClear
 										treeDefaultExpandAll
 										onChange={onChange}

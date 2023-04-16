@@ -1,11 +1,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { Button, Divider, Dropdown, Space, theme } from 'antd'
 import './AppHeader.css'
 import { useHistory, useLocation } from 'react-router-dom'
 import LoginModal from '../LoginModal/LoginModal'
+import { useSelector, useDispatch } from 'react-redux'
+import Cookies from 'js-cookie'
+import { deleteToken } from '../../features/session/sessionSlice'
 
 const { useToken } = theme
 
@@ -36,16 +39,44 @@ const items = [
 	},
 ]
 
+const defaultData = [{}]
+
 const UpperHeader = () => {
 	const [visible, setVisible] = useState(false)
-	const [isAuth, setIsAuth] = useState(true)
-
+	const [isAuth, setIsAuth] = useState(false)
+	const [userData, setUserData] = useState({ first_name: '', last_name: '' })
 	const location = useLocation()
+	const dispatch = useDispatch()
 
 	const handleOk = () => {
 		console.log(location)
 		setVisible(false)
 	}
+
+	const getUserData = async (token) => {
+		const response = await fetch('http://localhost:8000/api/user/', {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+		const data = await response.json()
+		if (response.status === 200) {
+			console.log('User data received!')
+			console.log(data)
+			setUserData({ first_name: data.first_name, last_name: data.last_name })
+		} else {
+			console.log('Failed to get user data!')
+		}
+	}
+
+	useEffect(() => {
+		const token = Cookies.get('token')
+		if (token) {
+			setIsAuth(true)
+			getUserData(token)
+		}
+	})
 
 	const handleCancel = () => {
 		setVisible(false)
@@ -73,6 +104,8 @@ const UpperHeader = () => {
 	}
 
 	const onLogoutClick = () => {
+		dispatch(deleteToken())
+		Cookies.remove('token')
 		setIsAuth(false)
 	}
 
@@ -136,7 +169,7 @@ const UpperHeader = () => {
 									>
 										<a onClick={(e) => e.preventDefault()} style={{ textDecoration: 'none' }}>
 											<Space style={{ color: 'white', textDecoration: 'none' }}>
-												Вася Пупкин
+												{userData.first_name + ' ' + userData.last_name}
 												<DownOutlined style={{ color: 'white' }} />
 											</Space>
 										</a>
