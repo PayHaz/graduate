@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
-import { Modal, Form, Input, Button, Checkbox, Typography } from 'antd'
+import { Modal, Form, Input, Button, Checkbox, Typography, message } from 'antd'
 import './LoginModal.css'
 import { useSelector, useDispatch } from 'react-redux'
 import RegistrationModal from '../RegistrationModal/RegistrationModal'
@@ -14,6 +14,7 @@ const { Text } = Typography
 const LoginModal = ({ visible, handleOk, handleCancel }) => {
 	const [form] = Form.useForm()
 	const session = useSelector((state) => state.session.value)
+	const [messageApi, contextHolder] = message.useMessage()
 	const dispatch = useDispatch()
 	const [loading, setLoading] = useState(false)
 	const [rememberPassword, setRememberPassword] = useState(false)
@@ -29,7 +30,12 @@ const LoginModal = ({ visible, handleOk, handleCancel }) => {
 		}, 2000)
 	}
 
+	const error = () => {
+		message.error('Неверный логин или пароль!')
+	}
+
 	const onFinish = async (values) => {
+		setLoading(true)
 		const response = await fetch('http://localhost:8000/api/token/', {
 			method: 'POST',
 			headers: {
@@ -39,20 +45,16 @@ const LoginModal = ({ visible, handleOk, handleCancel }) => {
 		})
 		const data = await response.json()
 		console.log(data.access)
-		setLoading(true)
-		setTimeout(() => {
-			if (response.status === 200) {
-				console.log('Authorization successful!')
-				console.log(data.access)
-				setLoading(false)
-				Cookies.set('token', data.access)
-				dispatch(setToken(data.access))
-				handleOk() // JWT-токен
-			} else {
-				console.log('Authorization failed!')
-				setLoading(false)
-			}
-		})
+
+		if (response.status === 200) {
+			setLoading(false)
+			Cookies.set('token', data.access)
+			dispatch(setToken(data.access))
+			handleOk() // JWT-токен
+		} else {
+			error()
+			setLoading(false)
+		}
 	}
 
 	const onSubModel = (e, stateSub = true, stateMain = false) => {
