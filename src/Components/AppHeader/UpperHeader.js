@@ -50,6 +50,7 @@ const UpperHeader = () => {
 
 	const handleOk = () => {
 		console.log(location)
+		onUserLogin()
 		setVisible(false)
 	}
 
@@ -70,13 +71,17 @@ const UpperHeader = () => {
 		}
 	}
 
-	useEffect(() => {
+	const onUserLogin = () => {
 		const token = Cookies.get('token')
 		if (token) {
 			setIsAuth(true)
 			getUserData(token)
 		}
-	})
+	}
+
+	useEffect(() => {
+		onUserLogin()
+	}, [])
 
 	const handleCancel = () => {
 		setVisible(false)
