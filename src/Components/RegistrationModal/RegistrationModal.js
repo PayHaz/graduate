@@ -44,7 +44,7 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 					rules={[
 						{
 							required: true,
-							message: 'Please input your email!',
+							message: 'Пожалуйста, ввведите email!',
 						},
 					]}
 				>
@@ -56,7 +56,7 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 					rules={[
 						{
 							required: true,
-							message: 'Please input your last name!',
+							message: 'Пожалуйста, ввведите телефон',
 						},
 					]}
 				>
@@ -68,7 +68,7 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 					rules={[
 						{
 							required: true,
-							message: 'Please input your first name!',
+							message: 'Пожалуйста, ввведите имя!',
 						},
 					]}
 				>
@@ -76,11 +76,11 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 				</Form.Item>
 				<Form.Item
 					name='last_name'
-					label='Last Name'
+					label='Введите фамилию'
 					rules={[
 						{
 							required: true,
-							message: 'Please input your last name!',
+							message: 'Пожалуйста, ввведите фамилию!',
 						},
 					]}
 				>
@@ -88,11 +88,11 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 				</Form.Item>
 				<Form.Item
 					name='password'
-					label='Password'
+					label='Введите пароль'
 					rules={[
 						{
 							required: true,
-							message: 'Please input your password!',
+							message: 'Пожалуйста, ввведите пароль!',
 						},
 					]}
 				>
@@ -100,12 +100,12 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 				</Form.Item>
 				<Form.Item
 					name='repassword'
-					label='Confirm Password'
+					label='Повторите пароль'
 					dependencies={['password']}
 					rules={[
 						{
 							required: true,
-							message: 'Please confirm your password!',
+							message: 'Пожалуйста, ввведите повторный пароль!',
 						},
 						({ getFieldValue }) => ({
 							validator(_, value) {
@@ -120,7 +120,7 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 					<Input.Password />
 				</Form.Item>
 
-				<Form.Item>
+				<Form.Item style={{ display: 'flex', margin: '0', justifyContent: 'center' }}>
 					<Button type='primary' htmlType='submit' loading={loading}>
 						Register
 					</Button>

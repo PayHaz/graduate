@@ -1,10 +1,16 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
-import { AutoComplete, Input, Form } from 'antd'
+import { AutoComplete, Input, Form, Button, Select, Modal } from 'antd'
 import { useState } from 'react'
 import './AppHeader.css'
 import { useSelector } from 'react-redux'
 import RentaruLogo from './img/RentaRu.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
+
+const { Option } = Select
+
+const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань']
 
 const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min
 const searchResult = (query) =>
@@ -41,6 +47,8 @@ const searchResult = (query) =>
 const LowerHeader = () => {
 	const count = useSelector((state) => state.counter.value)
 	const [options, setOptions] = useState([])
+	const [visible, setVisible] = useState(false)
+	const [selectedCity, setSelectedCity] = useState(null)
 	const handleSearch = (value) => {
 		setOptions(value ? searchResult(value) : [])
 	}
@@ -50,6 +58,24 @@ const LowerHeader = () => {
 	const onChange = (value) => {
 		console.log(value)
 	}
+
+	const showModal = () => {
+		setVisible(true)
+	}
+
+	const handleOk = () => {
+		setVisible(false)
+	}
+
+	const handleCancel = () => {
+		setVisible(false)
+	}
+
+	const handleCitySelect = (value) => {
+		setSelectedCity(value)
+		handleOk()
+	}
+
 	return (
 		<div className='container'>
 			<header className='py-3 mb-2 mt-1'>
@@ -61,7 +87,7 @@ const LowerHeader = () => {
 						<img src={RentaruLogo} />
 					</a>
 
-					<Form>
+					<Form style={{ display: 'flex', alignItems: 'center' }}>
 						<AutoComplete
 							dropdownMatchSelectWidth={252}
 							className='search_panel'
@@ -77,6 +103,26 @@ const LowerHeader = () => {
 								enterButton
 							/>
 						</AutoComplete>
+						<>
+							<Button type='text' onClick={showModal} style={{ marginLeft: '10px', fontSize: '17px' }}>
+								<i class='fa fa-map-marker' style={{ color: '#00aaff', paddingRight: '5px' }}></i>
+								{selectedCity ? selectedCity : 'Выберите город'}
+							</Button>
+							<Modal title='Выберите город' visible={visible} onOk={handleOk} onCancel={handleCancel}>
+								<Select
+									showSearch
+									placeholder='Выберите город'
+									style={{ width: '100%' }}
+									onChange={handleCitySelect}
+								>
+									{cities.map((city) => (
+										<Option key={city} value={city}>
+											{city}
+										</Option>
+									))}
+								</Select>
+							</Modal>
+						</>
 					</Form>
 				</div>
 			</header>
