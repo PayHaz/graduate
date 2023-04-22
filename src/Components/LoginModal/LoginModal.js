@@ -22,14 +22,6 @@ const LoginModal = ({ visible, handleOk, handleCancel }) => {
 	const [isMainModel, setMainModel] = useState(false)
 	const [isSubModel, setSubModel] = useState(false)
 
-	const onFinish1 = (values) => {
-		setLoading(true)
-		setTimeout(() => {
-			setLoading(false)
-			handleOk()
-		}, 2000)
-	}
-
 	const error = () => {
 		message.error('Неверный логин или пароль!')
 	}
