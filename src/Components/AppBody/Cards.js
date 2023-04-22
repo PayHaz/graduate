@@ -1,7 +1,8 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Carousel } from 'antd'
+import { useSelector } from 'react-redux'
 import './carousel.css'
+import Cookies from 'js-cookie'
 
 const contentStyle = {
 	margin: 0,
@@ -12,67 +13,30 @@ const contentStyle = {
 	background: '#364d79',
 }
 
-const onLoadCards = [
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '1',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '2',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '3',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '4',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '5',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '6',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '7',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '8',
-	},
-]
-
 const Cards = () => {
-	const [allCards] = useState(onLoadCards)
+	const [allCards, setAllCards] = useState([])
+	const city = useSelector((state) => state.city.value)
+
+	const fetchData = async () => {
+		try {
+			const response = await fetch('http://127.0.0.1:8000/', {
+				headers: {
+					'x-city-id': Cookies.get('city_id'),
+				},
+			})
+			const data = await response.json()
+			setAllCards(data)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		fetchData()
+		if (city) {
+			fetchData()
+		}
+	}, [city])
 
 	const card = allCards.map((el, index) => {
 		return (

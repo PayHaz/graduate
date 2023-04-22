@@ -1,16 +1,29 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AutoComplete, Input, Form, Button, Select, Modal } from 'antd'
 import { useState } from 'react'
 import './AppHeader.css'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import RentaruLogo from './img/RentaRu.png'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import Cookies from 'js-cookie'
+import { setCity } from '../../features/city/citySlice'
 
 const { Option } = Select
 
-const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань']
+const cities = [
+	{
+		value: 1,
+		label: 'Москва',
+	},
+	{
+		value: 2,
+		label: 'Новосибирск',
+	},
+	{
+		value: 3,
+		label: 'Нижневартовск',
+	},
+]
 
 const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min
 const searchResult = (query) =>
@@ -44,11 +57,13 @@ const searchResult = (query) =>
 			}
 		})
 
-const LowerHeader = () => {
-	const count = useSelector((state) => state.counter.value)
+const LowerHeader = (props) => {
 	const [options, setOptions] = useState([])
 	const [visible, setVisible] = useState(false)
 	const [selectedCity, setSelectedCity] = useState(null)
+	const [cityName, setCityName] = useState()
+	const dispatch = useDispatch()
+
 	const handleSearch = (value) => {
 		setOptions(value ? searchResult(value) : [])
 	}
@@ -58,6 +73,15 @@ const LowerHeader = () => {
 	const onChange = (value) => {
 		console.log(value)
 	}
+
+	useEffect(() => {
+		const cookie = Cookies.get('city_id')
+		if (cookie) {
+			const name = cities.find((city) => city.value === parseInt(cookie))
+			setCityName(name.label)
+			setSelectedCity(parseInt(cookie))
+		}
+	}, [])
 
 	const showModal = () => {
 		setVisible(true)
@@ -72,6 +96,10 @@ const LowerHeader = () => {
 	}
 
 	const handleCitySelect = (value) => {
+		const name = cities.find((city) => city.value === value)
+		setCityName(name.label)
+		Cookies.set('city_id', value)
+		dispatch(setCity(value))
 		setSelectedCity(value)
 		handleOk()
 	}
@@ -105,8 +133,11 @@ const LowerHeader = () => {
 						</AutoComplete>
 						<>
 							<Button type='text' onClick={showModal} style={{ marginLeft: '10px', fontSize: '17px' }}>
-								<i class='fa fa-map-marker' style={{ color: '#00aaff', paddingRight: '5px' }}></i>
-								{selectedCity ? selectedCity : 'Выберите город'}
+								<i
+									class='fa fa-map-marker'
+									style={{ color: '#00aaff', paddingRight: '5px', fontSize: '24px' }}
+								></i>
+								{selectedCity ? cityName : 'Выберите город'}
 							</Button>
 							<Modal title='Выберите город' visible={visible} onOk={handleOk} onCancel={handleCancel}>
 								<Select
@@ -114,13 +145,8 @@ const LowerHeader = () => {
 									placeholder='Выберите город'
 									style={{ width: '100%' }}
 									onChange={handleCitySelect}
-								>
-									{cities.map((city) => (
-										<Option key={city} value={city}>
-											{city}
-										</Option>
-									))}
-								</Select>
+									options={cities}
+								></Select>
 							</Modal>
 						</>
 					</Form>
