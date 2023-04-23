@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './carousel.css'
 
 const onLoadCategories = [
@@ -13,11 +13,30 @@ const onLoadCategories = [
 ]
 
 const Category = () => {
-	const [categories] = useState(onLoadCategories)
+	const [categories, setCategories] = useState([])
+
+	const fetchData = async () => {
+		try {
+			const response = await fetch('http://127.0.0.1:8000/category')
+			const responseData = await response.json()
+			const formatedData = responseData.map((obj) => ({
+				value: obj.id,
+				label: obj.name,
+			}))
+			setCategories(formatedData)
+			console.log(formatedData)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
 
 	const Cat = categories.map((el) => {
 		return (
-			<div key={el.key} className={el.key > 5 ? 'col category pt-2' : 'col category'}>
+			<div key={el.value} className={el.value > 5 ? 'col category pt-2' : 'col category'}>
 				<a className='category__element' href='/'>
 					{el.label}
 				</a>
