@@ -1,29 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { AutoComplete, Input, Form, Button, Select, Modal } from 'antd'
 import { useState } from 'react'
 import './AppHeader.css'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import RentaruLogo from './img/RentaRu.png'
 import Cookies from 'js-cookie'
 import { setCity } from '../../features/city/citySlice'
-
-const { Option } = Select
-
-const cities = [
-	{
-		value: 1,
-		label: 'Москва',
-	},
-	{
-		value: 2,
-		label: 'Новосибирск',
-	},
-	{
-		value: 3,
-		label: 'Нижневартовск',
-	},
-]
 
 const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min
 const searchResult = (query) =>
@@ -57,12 +40,34 @@ const searchResult = (query) =>
 			}
 		})
 
-const LowerHeader = (props) => {
+const LowerHeader = () => {
 	const [options, setOptions] = useState([])
 	const [visible, setVisible] = useState(false)
 	const [selectedCity, setSelectedCity] = useState(null)
+	const [cities, setCities] = useState([])
 	const [cityName, setCityName] = useState()
+	const [open, setOpen] = useState(false)
 	const dispatch = useDispatch()
+
+	const fetchData = async () => {
+		try {
+			const response = await fetch('http://127.0.0.1:8000/city', {
+				headers: {
+					'x-city-id': Cookies.get('city_id'),
+				},
+			})
+			const responseData = await response.json()
+			const formatedData = responseData.map((obj) => ({
+				value: obj.id,
+				label: obj.name,
+			}))
+			setCities(formatedData)
+			setOpen(true)
+			console.log(formatedData)
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	const handleSearch = (value) => {
 		setOptions(value ? searchResult(value) : [])
@@ -74,14 +79,26 @@ const LowerHeader = (props) => {
 		console.log(value)
 	}
 
-	useEffect(() => {
+	const onPageLoad = useCallback(() => {
 		const cookie = Cookies.get('city_id')
-		if (cookie) {
-			const name = cities.find((city) => city.value === parseInt(cookie))
-			setCityName(name.label)
-			setSelectedCity(parseInt(cookie))
+		if (open) {
+			if (cookie) {
+				console.log(cities)
+				const name = cities.find((city) => city.value === parseInt(cookie))
+				console.log(name)
+				setCityName(name.label)
+				setSelectedCity(parseInt(cookie))
+			}
 		}
+	}, [cities, open])
+
+	useEffect(() => {
+		fetchData()
 	}, [])
+
+	useEffect(() => {
+		onPageLoad()
+	}, [onPageLoad])
 
 	const showModal = () => {
 		setVisible(true)
@@ -139,7 +156,13 @@ const LowerHeader = (props) => {
 								></i>
 								{selectedCity ? cityName : 'Выберите город'}
 							</Button>
-							<Modal title='Выберите город' visible={visible} onOk={handleOk} onCancel={handleCancel}>
+							<Modal
+								title='Выберите город'
+								visible={visible}
+								onOk={handleOk}
+								onCancel={handleCancel}
+								footer={[]}
+							>
 								<Select
 									showSearch
 									placeholder='Выберите город'

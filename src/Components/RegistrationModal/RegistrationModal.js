@@ -23,13 +23,13 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 		})
 		const data = await response.json()
 		console.log(data)
-		if (response.status === 200) {
-			message.success('Registration successful')
+		if (response.status === 201) {
+			message.success('Вы зарегестрированы!')
 			form.resetFields()
 			setLoading(false)
 			handleCancel()
 		} else {
-			message.error('Registration failed')
+			message.error('Не удалось зарегистрироваться!')
 			setLoading(false)
 		}
 		setLoading(false)
@@ -122,7 +122,7 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 
 				<Form.Item style={{ display: 'flex', margin: '0', justifyContent: 'center' }}>
 					<Button type='primary' htmlType='submit' loading={loading}>
-						Register
+						Зарегистрироваться
 					</Button>
 				</Form.Item>
 			</Form>

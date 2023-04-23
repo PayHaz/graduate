@@ -129,3 +129,9 @@ a.card__title:hover {
 body {
 	font-family: 'Golos Text', sans-serif;
 }
+
+.empty__title {
+	display: flex;
+	justify-content: center;
+	padding-top: 70px;
+}

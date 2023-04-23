@@ -18,16 +18,27 @@ const Cards = () => {
 	const city = useSelector((state) => state.city.value)
 
 	const fetchData = async () => {
-		try {
-			const response = await fetch('http://127.0.0.1:8000/', {
-				headers: {
-					'x-city-id': Cookies.get('city_id'),
-				},
-			})
-			const data = await response.json()
-			setAllCards(data)
-		} catch (error) {
-			console.log(error)
+		const cookie = Cookies.get('city_id')
+		if (cookie) {
+			try {
+				const response = await fetch('http://127.0.0.1:8000/', {
+					headers: {
+						'x-city-id': Cookies.get('city_id'),
+					},
+				})
+				const data = await response.json()
+				setAllCards(data)
+			} catch (error) {
+				console.log(error)
+			}
+		} else {
+			try {
+				const response = await fetch('http://127.0.0.1:8000/')
+				const data = await response.json()
+				setAllCards(data)
+			} catch (error) {
+				console.log(error)
+			}
 		}
 	}
 
@@ -59,11 +70,11 @@ const Cards = () => {
 					<div className='card-body'>
 						<h5 className='card-title'>
 							<a href='/' className='card__title'>
-								{el.label}
+								{el.name}
 							</a>
 						</h5>
 						<p className='card-text'>{el.description}</p>
-						<p className='card-text'>{el.coast}</p>
+						<p className='card-text'>{el.price}</p>
 						<p className='card-text'>{el.location}</p>
 					</div>
 				</div>
@@ -71,9 +82,15 @@ const Cards = () => {
 		)
 	})
 
+	const onEmptyCity = () => {
+		return <h3>К сожалению, в вашем городе ещё нет объявлений.</h3>
+	}
+
 	return (
 		<div className='container px-4'>
-			<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>{card}</div>
+			<div className={allCards.length ? 'row  row-cols-1 row-cols-lg-3 col-md-auto ' : 'empty__title'}>
+				{allCards.length ? card : onEmptyCity()}
+			</div>
 		</div>
 	)
 }

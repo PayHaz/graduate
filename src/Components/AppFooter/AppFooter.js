@@ -7,7 +7,7 @@ const AppFooter = () => {
 		<footer className='d-flex flex-wrap justify-content-center align-items-center py-3 my-4 border-top'>
 			<div className='container'>
 				<div className='row alig-footer'>
-					<p className='col-md-4 mb-0 text-muted'>&copy; 2022 Company, Inc</p>
+					<p className='col-md-4 mb-0 text-muted'>&copy; 2023 Ермаков В.К., НВГУ</p>
 
 					<a
 						href='/'
@@ -21,27 +21,12 @@ const AppFooter = () => {
 					<ul className='nav col-md-4 justify-content-end'>
 						<li className='nav-item'>
 							<a href='#' className='nav-link px-2 text-muted'>
-								Home
+								Помощь
 							</a>
 						</li>
 						<li className='nav-item'>
 							<a href='#' className='nav-link px-2 text-muted'>
-								Features
-							</a>
-						</li>
-						<li className='nav-item'>
-							<a href='#' className='nav-link px-2 text-muted'>
-								Pricing
-							</a>
-						</li>
-						<li className='nav-item'>
-							<a href='#' className='nav-link px-2 text-muted'>
-								FAQs
-							</a>
-						</li>
-						<li className='nav-item'>
-							<a href='#' className='nav-link px-2 text-muted'>
-								About
+								О проекте
 							</a>
 						</li>
 					</ul>
