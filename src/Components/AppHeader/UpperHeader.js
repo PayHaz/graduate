@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { DownOutlined } from '@ant-design/icons'
 import { Button, Divider, Dropdown, Space, theme } from 'antd'
 import './AppHeader.css'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import LoginModal from '../LoginModal/LoginModal'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import Cookies from 'js-cookie'
-import { deleteToken } from '../../features/session/sessionSlice'
+import { deleteToken, setToken } from '../../features/session/sessionSlice'
 
 const { useToken } = theme
 

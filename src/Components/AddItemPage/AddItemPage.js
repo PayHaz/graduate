@@ -5,6 +5,8 @@ import './AddItemPage.css'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import Cookies from 'js-cookie'
+import { setToken } from '../../features/session/sessionSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
@@ -43,7 +45,12 @@ const AddItemPage = () => {
 	const [previewImage, setPreviewImage] = useState('')
 	const [previewTitle, setPreviewTitle] = useState('')
 	const [fileList, setFileList] = useState([])
-	const [loading, setLoading] = useState(false)
+	const [setLoading] = useState(false)
+	const dispatch = useDispatch()
+	if (Cookies.get('token') !== undefined) {
+		dispatch(setToken(Cookies.get('token')))
+	}
+	const session = useSelector((state) => state.session.value)
 
 	const [formCategory] = Form.useForm()
 	const [formInform] = Form.useForm()
@@ -109,7 +116,6 @@ const AddItemPage = () => {
 				price: values.price,
 				city: values.city,
 			})
-			setLoading(true)
 			next()
 		}
 	}
@@ -202,23 +208,29 @@ const AddItemPage = () => {
 			)
 	}
 
-	return (
-		<div className='container'>
-			<div className='row'>
-				<h1>Новое объявление</h1>
-				<Steps current={current} onChange={onChange} items={steps} />
-				<div className='pt-5 change__category__group'>
-					{StepContent()}
+	const addItemContent = () => {
+		if (session !== '')
+			return (
+				<div className='container'>
+					<div className='row'>
+						<h1>Новое объявление</h1>
+						<Steps current={current} onChange={onChange} items={steps} />
+						<div className='pt-5 change__category__group'>
+							{StepContent()}
 
-					{current === steps.length - 1 && (
-						<Button type='primary' onClick={() => message.success('Processing complete!')}>
-							Done
-						</Button>
-					)}
+							{current === steps.length - 1 && (
+								<Button type='primary' onClick={() => message.success('Processing complete!')}>
+									Done
+								</Button>
+							)}
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-	)
+			)
+		else return <h1>Печалька</h1>
+	}
+
+	return addItemContent()
 }
 
 export default AddItemPage
