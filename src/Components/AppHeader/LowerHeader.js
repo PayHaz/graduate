@@ -169,6 +169,9 @@ const LowerHeader = () => {
 									style={{ width: '100%' }}
 									onChange={handleCitySelect}
 									options={cities}
+									filterOption={(input, option) =>
+										(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+									}
 								></Select>
 							</Modal>
 						</>
