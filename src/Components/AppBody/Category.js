@@ -2,16 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import './carousel.css'
 
-const onLoadCategories = [
-	{ label: 'Все категории', key: '1' },
-	{ label: 'Транспортные средства', key: '2' },
-	{ label: 'Строительное оборудование', key: '3' },
-	{ label: 'Перфораторы', key: '4' },
-	{ label: 'Мото-техника', key: '5' },
-	{ label: 'Тепловое оборудование', key: '6' },
-	{ label: 'Климатическая техника', key: '7' },
-]
-
 const Category = () => {
 	const [categories, setCategories] = useState([])
 

@@ -1,44 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Steps, Button, message, Form, Upload, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import './AddItemPage.css'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
-
-const options = [
-	{
-		value: 'zhejiang',
-		label: 'Zhejiang',
-		children: [
-			{
-				value: 'hangzhou',
-				label: 'Hangzhou',
-				children: [
-					{
-						value: 'xihu',
-						label: 'West Lake',
-					},
-				],
-			},
-		],
-	},
-	{
-		value: 'jiangsu',
-		label: 'Jiangsu',
-		children: [
-			{
-				value: 'nanjing',
-				label: 'Nanjing',
-				children: [
-					{
-						value: 'zhonghuamen',
-						label: 'Zhong Hua Men',
-					},
-				],
-			},
-		],
-	},
-]
+import Cookies from 'js-cookie'
 
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
@@ -77,80 +43,61 @@ const AddItemPage = () => {
 	const [previewImage, setPreviewImage] = useState('')
 	const [previewTitle, setPreviewTitle] = useState('')
 	const [fileList, setFileList] = useState([])
+	const [loading, setLoading] = useState(false)
+
 	const [formCategory] = Form.useForm()
 	const [formInform] = Form.useForm()
 
 	const [formData, setFormData] = useState({
 		category: null,
 		name: '',
-		characteristics: [],
+		features: [],
 		description: '',
 		is_lower_bound: false,
-		PriceSuffix: 'N',
-		Price: '',
-		images: [],
+		price_suffix: 'N',
+		price: 100,
+		city: 0,
 	})
 
 	const handleChange = ({ fileList: newFileList }) => {
 		setFileList(newFileList.slice(0, 10))
 	}
 
-	const handleUpload = () => {
-		const formData = new FormData()
-		fileList.forEach((file) => {
-			formData.append('files', file.originFileObj)
-		})
-
-		fetch('http://localhost:1337/api/upload', {
-			method: 'POST',
-			body: formData,
-		})
-			.then((response) => {
-				if (response.ok) {
-					return response.json()
-				} else {
-					throw new Error('Failed to upload images')
-				}
-			})
-			.then((data) => {
-				const adData = {
-					images: data.map((file) => ({ url: file.url })),
-				}
-				fetch('http://localhost:1337/api/ads', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(adData),
-				})
-					.then((response) => {
-						if (response.ok) {
-							message.success('Ad created successfully')
-						} else {
-							throw new Error('Failed to create ad')
-						}
-					})
-					.catch((error) => {
-						message.error(error.message)
-					})
-			})
-			.catch((error) => {
-				message.error(error.message)
-			})
-	}
-
 	const onChange = (value) => {
 		setCurrent(value)
-		console.log(value)
+	}
+
+	const fetchData = async () => {
+		if (current === 2) {
+			const response = await fetch('http://localhost:8000/product', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+				body: JSON.stringify(formData),
+			})
+			const data = await response.json()
+			if (response.status === 201) {
+				message.success('Всё ок')
+			} else {
+				message.error('Печалька :c')
+			}
+		}
 	}
 
 	const next = () => {
 		setCurrent(current + 1)
 	}
 
+	useEffect(() => {
+		fetchData()
+	}, [formData])
+
 	const onFinish = (values) => {
 		if (current === 0) {
 			setFormData({ ...formData, category: values })
+			next()
 		}
 		if (current === 1) {
 			setFormData({
@@ -158,12 +105,13 @@ const AddItemPage = () => {
 				name: values.name,
 				description: values.description,
 				characteristics: values.characteristics,
-				PriceSuffix: values.priceSuffix,
-				Price: values.price,
+				priceSuffix: values.priceSuffix,
+				price: values.price,
+				city: values.city,
 			})
+			setLoading(true)
+			next()
 		}
-		console.log(formData)
-		next()
 	}
 
 	const prev = () => {
@@ -193,10 +141,8 @@ const AddItemPage = () => {
 	)
 
 	const StepContent = () => {
-		const { category } = formData
-		if (current === 0)
-			return <FirstStep formCategory={formCategory} onFinish={onFinish} options={options} category={category} />
-		if (current === 1)
+		if (current === 0) return <FirstStep formCategory={formCategory} onFinish={onFinish} />
+		if (current === 1) {
 			return (
 				<SecondStep
 					formInform={formInform}
@@ -207,6 +153,7 @@ const AddItemPage = () => {
 					prev={prev}
 				/>
 			)
+		}
 		if (current === 2)
 			return (
 				<>

@@ -21,7 +21,7 @@ const Cards = () => {
 		const cookie = Cookies.get('city_id')
 		if (cookie) {
 			try {
-				const response = await fetch('http://127.0.0.1:8000/', {
+				const response = await fetch('http://127.0.0.1:8000/product', {
 					headers: {
 						'x-city-id': Cookies.get('city_id'),
 					},
@@ -33,7 +33,7 @@ const Cards = () => {
 			}
 		} else {
 			try {
-				const response = await fetch('http://127.0.0.1:8000/')
+				const response = await fetch('http://127.0.0.1:8000/product')
 				const data = await response.json()
 				setAllCards(data)
 			} catch (error) {

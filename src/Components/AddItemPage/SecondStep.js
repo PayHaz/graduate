@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Input, Button, Space, Select, InputNumber } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Checkbox } from 'antd'
@@ -43,10 +43,25 @@ const options = [
 const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) => {
 	const { name, description } = formData
 	const { TextArea } = Input
+	const [cities, setCities] = useState([])
 
-	const onChange = (value) => {
-		console.log('changed', value)
+	const fetchData = async () => {
+		try {
+			const response = await fetch('http://127.0.0.1:8000/city')
+			const responseData = await response.json()
+			const formatedData = responseData.map((obj) => ({
+				value: obj.id,
+				label: obj.name,
+			}))
+			setCities(formatedData)
+		} catch (error) {
+			console.log(error)
+		}
 	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
 
 	return (
 		<div>
@@ -65,18 +80,19 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 					label='Название:'
 					rules={[{ required: true, message: 'Пожалуйста, введите название' }]}
 				>
-					<Input
-						type='text'
-						name='name'
-						value={name}
-						placeholder='Введите название'
-						className='form-control'
-					/>
+					<Input type='text' name='name' value={name} placeholder='Введите название' />
+				</Form.Item>
+				<Form.Item
+					name='city'
+					label='Город:'
+					rules={[{ required: true, message: 'Пожалуйста, выберите город' }]}
+				>
+					<Select showSearch placeholder='Выберите город' style={{ width: '100%' }} options={cities}></Select>
 				</Form.Item>
 				<div className='row'>
 					<label>Характеристики:</label>
 
-					<Form.List name='characteristics'>
+					<Form.List name='features'>
 						{(fields, { add, remove }) => (
 							<>
 								{fields.map(({ key, name, ...restField }) => (
@@ -91,7 +107,7 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 									>
 										<Form.Item
 											{...restField}
-											name={[name, 'parameter']}
+											name={[name, 'name']}
 											rules={[
 												{
 													required: true,
@@ -103,7 +119,7 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 										</Form.Item>
 										<Form.Item
 											{...restField}
-											name={[name, 'characteristic']}
+											name={[name, 'value']}
 											rules={[
 												{
 													required: true,
@@ -140,32 +156,20 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 					/>
 				</Form.Item>
 
-				<Form.Item
-					name='description'
-					label='Описание:'
-					rules={[{ required: true, message: 'Пожалуйста, введите описание' }]}
-				>
-					<TextArea
-						name='description'
-						value={description}
-						placeholder='Введите описание'
-						className='form-control'
-						maxLength={1000}
-					/>
-				</Form.Item>
+				<Space.Compact>
+					<Form.Item
+						name='price'
+						label='Стоимость:'
+						rules={[{ required: true, message: 'Пожалуйста, введите стоимость' }]}
+					>
+						<InputNumber placeholder='Введите стоимость' style={{ width: '200px' }} />
+					</Form.Item>
+					<Form.Item name='price_suffix'>
+						<Select defaultValue='N' value='N' options={options} style={{ width: '125px' }} />
+					</Form.Item>
+				</Space.Compact>
 
-				<Form.Item
-					name='price'
-					label='Стоимость:'
-					rules={[{ required: true, message: 'Пожалуйста, введите стоимость' }]}
-				>
-					<Space.Compact>
-						<InputNumber defaultValue={100} style={{ width: '200px' }} />
-						<Select defaultValue='рублей' options={options} />
-					</Space.Compact>
-				</Form.Item>
-
-				<Form.Item name='is_lower_bound'>
+				<Form.Item name='is_lower_bound' checked='false'>
 					<Checkbox>Это начальная стоимость</Checkbox>
 				</Form.Item>
 
@@ -181,14 +185,7 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 						</Button>
 					)}
 					{current < steps.length - 1 && (
-						<Button
-							type='primary'
-							htmlType='submit'
-							disabled={
-								!formInform.isFieldsTouched(true) ||
-								!!formInform.getFieldsError().filter(({ errors }) => errors.length).length
-							}
-						>
+						<Button type='primary' htmlType='submit'>
 							Следующий шаг
 						</Button>
 					)}
