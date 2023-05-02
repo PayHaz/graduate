@@ -227,7 +227,14 @@ const AddItemPage = () => {
 					</div>
 				</div>
 			)
-		else return <h1>Печалька</h1>
+		else
+			return (
+				<div className='container'>
+					<div className='error__label'>
+						<h3>Авторизируйтесь для доступа к этой странице.</h3>
+					</div>
+				</div>
+			)
 	}
 
 	return addItemContent()
