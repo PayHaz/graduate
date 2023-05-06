@@ -44,6 +44,7 @@ const AddItemPage = () => {
 	const [previewOpen, setPreviewOpen] = useState(false)
 	const [previewImage, setPreviewImage] = useState('')
 	const [previewTitle, setPreviewTitle] = useState('')
+	const [uploadProduct, setUploadProduct] = useState()
 	const [fileList, setFileList] = useState([])
 	const dispatch = useDispatch()
 	if (Cookies.get('token') !== undefined) {
@@ -86,6 +87,8 @@ const AddItemPage = () => {
 			const data = await response.json()
 			if (response.status === 201) {
 				message.success('Всё ок')
+				setUploadProduct(data.id)
+				console.log(data.id)
 			} else {
 				message.error('Печалька :c')
 			}
@@ -146,6 +149,31 @@ const AddItemPage = () => {
 		</div>
 	)
 
+	const handleUpload = async () => {
+		const formData = new FormData()
+		fileList.forEach((file) => {
+			formData.append('images', file.originFileObj)
+		})
+		try {
+			const response = await fetch('http://localhost:8000/product/' + uploadProduct + '/image', {
+				method: 'POST',
+				body: formData,
+			})
+			console.log(fileList)
+			const data = await response.json()
+			console.log(data)
+			if (response.status === 201) {
+				message.success('Фотографии успешно загружены!')
+				setUploadProduct(data.id)
+			} else {
+				message.error('Печалька :c')
+			}
+		} catch (error) {
+			console.error(error)
+			message.error('Не удалось загрузить фотографии')
+		}
+	}
+
 	const StepContent = () => {
 		if (current === 0) return <FirstStep formCategory={formCategory} onFinish={onFinish} />
 		if (current === 1) {
@@ -166,10 +194,10 @@ const AddItemPage = () => {
 					<h3>Загрузите фотографии:</h3>
 					<div>
 						<Upload
-							action='http://localhost:1337/api/upload'
 							listType='picture-card'
 							fileList={fileList}
 							onPreview={handlePreview}
+							beforeUpload={() => false}
 							onChange={handleChange}
 						>
 							{fileList.length >= 8 ? null : uploadButton}
@@ -185,12 +213,12 @@ const AddItemPage = () => {
 						</Modal>
 					</div>
 					{current < steps.length - 1 && (
-						<Button type='primary' onClick={() => next()}>
+						<Button type='primary' onClick={handleUpload}>
 							Next
 						</Button>
 					)}
 					{current === steps.length - 1 && (
-						<Button type='primary' onClick={() => message.success('Processing complete!')}>
+						<Button type='primary' onClick={handleUpload}>
 							Done
 						</Button>
 					)}

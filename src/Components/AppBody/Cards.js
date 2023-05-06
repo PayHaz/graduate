@@ -46,43 +46,20 @@ const Cards = () => {
 		}
 	}, [city])
 
+	const productImages = (images) => {
+		return images.map((image, index) => (
+			<div key={index}>
+				<img style={contentStyle} src={`http://localhost:8000${image}`} />
+			</div>
+		))
+	}
+
 	const card = allCards.map((el, index) => {
 		return (
 			<div className='col pt-3' key={index}>
 				<div className='card  h-100'>
 					<Carousel autoplay autoplaySpeed={Math.random() * (6000 - 3000) + 3000}>
-						{/*
-						<div>
-							<h3 style={contentStyle}>1</h3>
-						</div>
-						<div>
-							<h3 style={contentStyle}>2</h3>
-						</div>
-						<div>
-							<h3 style={contentStyle}>3</h3>
-						</div>
-						<div>
-							<h3 style={contentStyle}>4</h3>
-						</div>
-		*/}
-						<div>
-							<img
-								style={contentStyle}
-								src='https://el-koleso.ru/image/cache/catalog/tovary/velosipedy/148/148-1-800x600.jpg'
-							/>
-						</div>
-						<div>
-							<img
-								style={contentStyle}
-								src='https://img.freepik.com/free-photo/white-bicycle-standing-in-park_1153-7319.jpg?w=2000'
-							/>
-						</div>
-						<div>
-							<img
-								style={contentStyle}
-								src='https://www.velodrive.ru/upload/medialibrary/fce/khardteyl.jpg'
-							/>
-						</div>
+						{productImages(el.images)}
 					</Carousel>
 
 					<div className='card-body'>
