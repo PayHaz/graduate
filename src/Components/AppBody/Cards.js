@@ -74,8 +74,12 @@ const Cards = () => {
 							</a>
 						</h5>
 						<p className='card-text'>{el.description}</p>
-						<p className='card-text'>{el.price}</p>
-						<p className='card-text'>{el.location}</p>
+						<p className='card-text'>
+							{el.is_lower_bound ? 'от ' : ''}
+							{el.price}
+							{el.price_suffix ? ' ' + el.price_suffix : ''}
+						</p>
+						<p className='card-text'>{el.city_name}</p>
 					</div>
 				</div>
 			</div>

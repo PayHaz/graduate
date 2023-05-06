@@ -112,6 +112,7 @@ const AddItemPage = () => {
 				name: values.name,
 				description: values.description,
 				characteristics: values.characteristics,
+				is_lower_bound: values.is_lower_bound,
 				priceSuffix: values.priceSuffix,
 				price: values.price,
 				city: values.city,

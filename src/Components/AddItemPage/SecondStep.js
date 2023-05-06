@@ -3,8 +3,6 @@ import { Form, Input, Button, Space, Select, InputNumber } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Checkbox } from 'antd'
 
-const { Option } = Select
-
 const options = [
 	{
 		value: 'N',
@@ -42,6 +40,7 @@ const options = [
 
 const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) => {
 	const { name, description } = formData
+	const [checked, setChecked] = useState(true)
 	const { TextArea } = Input
 	const [cities, setCities] = useState([])
 
@@ -62,6 +61,10 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 	useEffect(() => {
 		fetchData()
 	}, [])
+
+	const onChange = (e) => {
+		setChecked(e.target.checked)
+	}
 
 	return (
 		<div>
@@ -169,8 +172,10 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 					</Form.Item>
 				</Space.Compact>
 
-				<Form.Item name='is_lower_bound' checked='false'>
-					<Checkbox>Это начальная стоимость</Checkbox>
+				<Form.Item name='is_lower_bound' valuePropName='checked'>
+					<Checkbox checked={checked} onChange={onChange}>
+						Это начальная стоимость
+					</Checkbox>
 				</Form.Item>
 
 				<Form.Item shouldUpdate>
