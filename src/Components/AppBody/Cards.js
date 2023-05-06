@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import { Carousel } from 'antd'
 import { useSelector } from 'react-redux'
@@ -5,12 +6,8 @@ import './carousel.css'
 import Cookies from 'js-cookie'
 
 const contentStyle = {
-	margin: 0,
-	height: '160px',
-	color: '#fff',
-	lineHeight: '160px',
-	textAlign: 'center',
-	background: '#364d79',
+	height: '230px',
+	width: '100%',
 }
 
 const Cards = () => {
@@ -51,9 +48,10 @@ const Cards = () => {
 
 	const card = allCards.map((el, index) => {
 		return (
-			<div className='col' key={index}>
-				<div className='card mt-5'>
+			<div className='col pt-3' key={index}>
+				<div className='card  h-100'>
 					<Carousel autoplay autoplaySpeed={Math.random() * (6000 - 3000) + 3000}>
+						{/*
 						<div>
 							<h3 style={contentStyle}>1</h3>
 						</div>
@@ -66,20 +64,42 @@ const Cards = () => {
 						<div>
 							<h3 style={contentStyle}>4</h3>
 						</div>
+		*/}
+						<div>
+							<img
+								style={contentStyle}
+								src='https://el-koleso.ru/image/cache/catalog/tovary/velosipedy/148/148-1-800x600.jpg'
+							/>
+						</div>
+						<div>
+							<img
+								style={contentStyle}
+								src='https://img.freepik.com/free-photo/white-bicycle-standing-in-park_1153-7319.jpg?w=2000'
+							/>
+						</div>
+						<div>
+							<img
+								style={contentStyle}
+								src='https://www.velodrive.ru/upload/medialibrary/fce/khardteyl.jpg'
+							/>
+						</div>
 					</Carousel>
+
 					<div className='card-body'>
 						<h5 className='card-title'>
 							<a href='/' className='card__title'>
 								{el.name}
 							</a>
 						</h5>
-						<p className='card-text'>{el.description}</p>
+						<p className='card-text card-description'>{el.description}</p>
+					</div>
+					<div class='card-footer'>
 						<p className='card-text'>
 							{el.is_lower_bound ? 'от ' : ''}
 							{el.price}
 							{el.price_suffix ? ' ' + el.price_suffix : ''}
 						</p>
-						<p className='card-text'>{el.city_name}</p>
+						<p className='card-text card-city'>{el.city_name}</p>
 					</div>
 				</div>
 			</div>
@@ -91,8 +111,8 @@ const Cards = () => {
 	}
 
 	return (
-		<div className='container px-4'>
-			<div className={allCards.length ? 'row  row-cols-1 row-cols-lg-3 col-md-auto ' : 'empty__title'}>
+		<div className='container px-4 pb-5 pt-4'>
+			<div className={allCards.length ? 'row  row-cols-1 row-cols-lg-3 col-md-auto' : 'empty__title'}>
 				{allCards.length ? card : onEmptyCity()}
 			</div>
 		</div>

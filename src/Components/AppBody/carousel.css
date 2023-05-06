@@ -135,3 +135,20 @@ body {
 	justify-content: center;
 	padding-top: 70px;
 }
+
+p.card-description {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+.card-city {
+	color: #958787;
+}
+
+.card-footer {
+	border-top: unset;
+	background-color: #ffff;
+}

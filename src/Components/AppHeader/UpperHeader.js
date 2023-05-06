@@ -136,13 +136,6 @@ const UpperHeader = () => {
 								<>
 									<div className='header_item header_button'>
 										<div className='header-services-menu'>
-											<a href='#'>
-												<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAl0lEQVR4nO3WsQ3CMBBA0asZISMwCVaGYAxPwzSIRWxGSEP1kSWQDMIoxfmuuV9bebEvliISeQeswB29KpD2wG2hdsXq1BYgA4+3bAJ3L5CH8MyZvnY+hKfOlD/wlAKWOGri41IqrpM4XafiARfgZA4P84Sry68OkJTx3zPd09eDNuAoFvHZ2QRtdehFLAOuwA04mMIzewKXM5wJv73VoAAAAABJRU5ErkJggg=='></img>
-											</a>
-										</div>
-									</div>
-									<div className='header_item header_button'>
-										<div className='header-services-menu'>
 											<a href='/ads'>Мои объявления</a>
 										</div>
 									</div>
