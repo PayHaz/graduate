@@ -11,15 +11,12 @@ import Cookies from 'js-cookie'
 
 const { Text } = Typography
 
-const LoginModal = ({ visible, handleOk, handleCancel }) => {
+const LoginModal = ({ open, handleOk, handleCancel }) => {
 	const [form] = Form.useForm()
-	const session = useSelector((state) => state.session.value)
-	const [messageApi, contextHolder] = message.useMessage()
 	const dispatch = useDispatch()
 	const [loading, setLoading] = useState(false)
 	const [rememberPassword, setRememberPassword] = useState(false)
-	const [RegistrationVisible, setRegistrationVisible] = useState(false)
-	const [isMainModel, setMainModel] = useState(false)
+	const [, setMainModel] = useState(false)
 	const [isSubModel, setSubModel] = useState(false)
 
 	const error = () => {
@@ -58,7 +55,7 @@ const LoginModal = ({ visible, handleOk, handleCancel }) => {
 	return (
 		<>
 			<Modal
-				visible={visible}
+				open={open}
 				title='Вход'
 				className={styles.booking_information_table}
 				onCancel={handleCancel}
@@ -135,7 +132,7 @@ const LoginModal = ({ visible, handleOk, handleCancel }) => {
 				</Form>
 			</Modal>
 			<RegistrationModal
-				visible={isSubModel}
+				open={isSubModel}
 				handleOk={() => setSubModel(false)}
 				handleCancel={() => setSubModel(false)}
 			/>

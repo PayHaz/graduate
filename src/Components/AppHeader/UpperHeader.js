@@ -192,7 +192,7 @@ const UpperHeader = () => {
 										>
 											Вход и регистрация
 										</Button>
-										<LoginModal visible={visible} handleOk={handleOk} handleCancel={handleCancel} />
+										<LoginModal open={visible} handleOk={handleOk} handleCancel={handleCancel} />
 									</div>
 								</div>
 							)}

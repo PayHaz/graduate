@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Form, Input, Button, message } from 'antd'
 import { MaskedInput } from 'antd-mask-input'
 
-const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
+const RegistrationModal = ({ open, handleOk, handleCancel }) => {
 	const [form] = Form.useForm()
 	const [loading, setLoading] = useState(false)
 
@@ -36,7 +36,7 @@ const RegistrationModal = ({ visible, handleOk, handleCancel }) => {
 	}
 
 	return (
-		<Modal title='Регистрация' visible={visible} onOk={form.submit} onCancel={handleCancel} footer={null}>
+		<Modal title='Регистрация' open={open} onOk={form.submit} onCancel={handleCancel} footer={null}>
 			<Form form={form} onFinish={onFinish}>
 				<Form.Item
 					name='email'

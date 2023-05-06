@@ -63,7 +63,6 @@ const LowerHeader = () => {
 			}))
 			setCities(formatedData)
 			setOpen(true)
-			console.log(formatedData)
 		} catch (error) {
 			console.log(error)
 		}
@@ -83,9 +82,7 @@ const LowerHeader = () => {
 		const cookie = Cookies.get('city_id')
 		if (open) {
 			if (cookie) {
-				console.log(cities)
 				const name = cities.find((city) => city.value === parseInt(cookie))
-				console.log(name)
 				setCityName(name.label)
 				setSelectedCity(parseInt(cookie))
 			}
@@ -151,14 +148,14 @@ const LowerHeader = () => {
 						<>
 							<Button type='text' onClick={showModal} style={{ marginLeft: '10px', fontSize: '17px' }}>
 								<i
-									class='fa fa-map-marker'
+									className='fa fa-map-marker'
 									style={{ color: '#00aaff', paddingRight: '5px', fontSize: '24px' }}
 								></i>
 								{selectedCity ? cityName : 'Выберите город'}
 							</Button>
 							<Modal
 								title='Выберите город'
-								visible={visible}
+								open={visible}
 								onOk={handleOk}
 								onCancel={handleCancel}
 								footer={[]}
