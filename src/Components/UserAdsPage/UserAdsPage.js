@@ -2,6 +2,9 @@ import React from 'react'
 import { Tabs } from 'antd'
 import ActiveAds from './Ads/ActiveAds'
 import АrchiveAds from './Ads/АrchiveAds'
+import Cookies from 'js-cookie'
+import { setToken } from '../../features/session/sessionSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const onChange = (key) => {
 	console.log(key)
@@ -20,12 +23,26 @@ const items = [
 ]
 
 const UserAdsPage = () => {
-	return (
-		<div className='container'>
-			<h1>Мои объявления</h1>
-			<Tabs defaultActiveKey='1' items={items} onChange={onChange} />
-		</div>
-	)
+	const dispatch = useDispatch()
+	if (Cookies.get('token') !== undefined) {
+		dispatch(setToken(Cookies.get('token')))
+	}
+	const session = useSelector((state) => state.session.value)
+	if (session !== '')
+		return (
+			<div className='container'>
+				<h1>Мои объявления</h1>
+				<Tabs defaultActiveKey='1' items={items} onChange={onChange} />
+			</div>
+		)
+	else
+		return (
+			<div className='container'>
+				<div className='error__label'>
+					<h3>Авторизируйтесь для доступа к этой странице.</h3>
+				</div>
+			</div>
+		)
 }
 
 export default UserAdsPage

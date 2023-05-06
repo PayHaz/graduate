@@ -45,7 +45,6 @@ const AddItemPage = () => {
 	const [previewImage, setPreviewImage] = useState('')
 	const [previewTitle, setPreviewTitle] = useState('')
 	const [fileList, setFileList] = useState([])
-	const [setLoading] = useState(false)
 	const dispatch = useDispatch()
 	if (Cookies.get('token') !== undefined) {
 		dispatch(setToken(Cookies.get('token')))
