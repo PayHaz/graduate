@@ -12,3 +12,8 @@
 	padding-top: 150px;
 	justify-content: center;
 }
+
+.next__step {
+	display: flex;
+	justify-content: center;
+}

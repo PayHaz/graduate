@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button, TreeSelect } from 'antd'
+import './AddItemPage.css'
 
 const FirstStep = ({ formCategory, onFinish }) => {
 	const [data, setData] = useState()
@@ -56,7 +57,7 @@ const FirstStep = ({ formCategory, onFinish }) => {
 						treeData={data}
 					/>
 				</Form.Item>
-				<Form.Item>
+				<Form.Item className='next__step'>
 					<Button type='primary' htmlType='submit'>
 						Следующий шаг
 					</Button>

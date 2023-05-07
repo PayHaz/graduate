@@ -86,11 +86,10 @@ const AddItemPage = () => {
 			})
 			const data = await response.json()
 			if (response.status === 201) {
-				message.success('Всё ок')
+				message.success('Осталось только добавить фотографии!')
 				setUploadProduct(data.id)
-				console.log(data.id)
 			} else {
-				message.error('Печалька :c')
+				message.error('Что-то пошло не так')
 			}
 		}
 	}
@@ -115,7 +114,7 @@ const AddItemPage = () => {
 				description: values.description,
 				characteristics: values.characteristics,
 				is_lower_bound: values.is_lower_bound,
-				priceSuffix: values.priceSuffix,
+				price_suffix: values.price_suffix,
 				price: values.price,
 				city: values.city,
 			})
@@ -154,23 +153,15 @@ const AddItemPage = () => {
 		fileList.forEach((file) => {
 			formData.append('images', file.originFileObj)
 		})
-		try {
-			const response = await fetch('http://localhost:8000/product/' + uploadProduct + '/image', {
-				method: 'POST',
-				body: formData,
-			})
-			console.log(fileList)
-			const data = await response.json()
-			console.log(data)
-			if (response.status === 201) {
-				message.success('Фотографии успешно загружены!')
-				setUploadProduct(data.id)
-			} else {
-				message.error('Печалька :c')
-			}
-		} catch (error) {
-			console.error(error)
-			message.error('Не удалось загрузить фотографии')
+		const response = await fetch('http://localhost:8000/product/' + uploadProduct + '/image', {
+			method: 'POST',
+			body: formData,
+		})
+		if (response.status === 201) {
+			next()
+			message.success('Фотографии успешно загружены!')
+		} else {
+			message.error('Печалька :c')
 		}
 	}
 
@@ -214,26 +205,14 @@ const AddItemPage = () => {
 					</div>
 					{current < steps.length - 1 && (
 						<Button type='primary' onClick={handleUpload}>
-							Next
-						</Button>
-					)}
-					{current === steps.length - 1 && (
-						<Button type='primary' onClick={handleUpload}>
-							Done
-						</Button>
-					)}
-					{current > 0 && (
-						<Button
-							style={{
-								margin: '0 8px',
-							}}
-							onClick={() => prev()}
-						>
-							Previous
+							Опубликровать объявление
 						</Button>
 					)}
 				</>
 			)
+		if (current === 3) {
+			return <h3>Выше объявление отравлено на модерацию!</h3>
+		}
 	}
 
 	const addItemContent = () => {
@@ -243,12 +222,11 @@ const AddItemPage = () => {
 					<div className='row'>
 						<h1>Новое объявление</h1>
 						<Steps current={current} onChange={onChange} items={steps} />
-						<div className='pt-5 change__category__group'>
+						<div className='pt-5 col-6 mx-auto change__category__group'>
 							{StepContent()}
-
 							{current === steps.length - 1 && (
-								<Button type='primary' onClick={() => message.success('Processing complete!')}>
-									Done
+								<Button href='/' type='primary' onClick={() => message.success('Processing complete!')}>
+									Вернуться на главную
 								</Button>
 							)}
 						</div>

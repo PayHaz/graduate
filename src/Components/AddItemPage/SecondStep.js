@@ -41,6 +41,7 @@ const options = [
 const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) => {
 	const { name, description } = formData
 	const [checked, setChecked] = useState(true)
+	const [selectedValue, setSelectedValue] = useState()
 	const { TextArea } = Input
 	const [cities, setCities] = useState([])
 
@@ -64,6 +65,10 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 
 	const onChange = (e) => {
 		setChecked(e.target.checked)
+	}
+
+	const onSelectChange = (value) => {
+		setSelectedValue(value)
 	}
 
 	return (
@@ -93,7 +98,7 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 					<Select showSearch placeholder='Выберите город' style={{ width: '100%' }} options={cities}></Select>
 				</Form.Item>
 				<div className='row'>
-					<label>Характеристики:</label>
+					<label className='next__step mb-2'>Характеристики:</label>
 
 					<Form.List name='features'>
 						{(fields, { add, remove }) => (
@@ -104,6 +109,7 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 										style={{
 											display: 'flex',
 											marginBottom: 8,
+											justifyContent: 'center',
 										}}
 										align='baseline'
 										className={key === 0 ? 'pt-3' : ''}
@@ -168,17 +174,23 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 						<InputNumber placeholder='Введите стоимость' style={{ width: '200px' }} />
 					</Form.Item>
 					<Form.Item name='price_suffix'>
-						<Select defaultValue='N' value='N' options={options} style={{ width: '125px' }} />
+						<Select
+							value={selectedValue}
+							defaultValue={'N'}
+							onChange={onSelectChange}
+							options={options}
+							style={{ width: '125px' }}
+						/>
 					</Form.Item>
 				</Space.Compact>
 
-				<Form.Item name='is_lower_bound' valuePropName='checked'>
+				<Form.Item name='is_lower_bound' className='next__step' valuePropName='checked'>
 					<Checkbox checked={checked} onChange={onChange}>
 						Это начальная стоимость
 					</Checkbox>
 				</Form.Item>
 
-				<Form.Item shouldUpdate>
+				<Form.Item shouldUpdate className='next__step'>
 					{current > 0 && (
 						<Button
 							style={{
