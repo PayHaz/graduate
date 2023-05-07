@@ -2,26 +2,20 @@
 import React, { useState, useEffect } from 'react'
 import { Dropdown, Button } from 'antd'
 import '../UserAdsPage.css'
+import Cookies from 'js-cookie'
 
 const ActiveAds = () => {
 	const [data, setData] = useState([])
 
 	async function fetchData() {
 		try {
-			const response = await fetch('http://localhost:1337/api/ads')
+			const response = await fetch('http://127.0.0.1:8000/product?status=AC', {
+				headers: {
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+			})
 			const responseData = await response.json()
-			const formattedData = responseData.data.map((obj) => ({
-				label: obj.attributes.label,
-				status: obj.attributes.status,
-				description: obj.attributes.description,
-				location: obj.attributes.location,
-				coast: obj.attributes.coast,
-				createdAt: obj.attributes.created_at,
-				updatedAt: obj.attributes.updated_at,
-				publishedAt: obj.attributes.published_at,
-				id: obj.id,
-			}))
-			setData(formattedData)
+			setData(responseData)
 		} catch (error) {
 			console.error(error)
 		}
@@ -60,7 +54,7 @@ const ActiveAds = () => {
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>
-								<a href='/product'>{el.label}</a>
+								<a href='/product'>{el.name}</a>
 							</h5>
 							<Dropdown
 								menu={{
@@ -80,8 +74,8 @@ const ActiveAds = () => {
 						</div>
 
 						<p className='card-text'>{el.description}</p>
-						<p className='card-text'>{el.coast}</p>
-						<p className='card-text'>{el.location}</p>
+						<p className='card-text'>{el.price}</p>
+						<p className='card-text'>{el.city_name}</p>
 					</div>
 				</div>
 			</div>

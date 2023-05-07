@@ -8,7 +8,7 @@ import Main3 from './img/MainBanners/MainRent3.jpg'
 
 const Carousel = () => {
 	return (
-		<div id='myCarousel' className='carousel slide' data-bs-ride='carousel'>
+		<div id='myCarousel' className='carousell slide' data-bs-ride='carousell'>
 			<div className='carousel-indicators'>
 				<button
 					type='button'
@@ -23,7 +23,7 @@ const Carousel = () => {
 			</div>
 			<div className='carousel-inner'>
 				<div className='carousel-item active'>
-					<img src={Main1}></img>
+					<img style={{ width: 'nan' }} src={Main1}></img>
 
 					<div className='container'>
 						<div className='carousel-caption text-start'>
