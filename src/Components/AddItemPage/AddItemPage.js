@@ -218,20 +218,29 @@ const AddItemPage = () => {
 	const addItemContent = () => {
 		if (session !== '')
 			return (
-				<div className='container'>
-					<div className='row'>
-						<h1>Новое объявление</h1>
-						<Steps current={current} onChange={onChange} items={steps} />
-						<div className='pt-5 col-6 mx-auto change__category__group'>
-							{StepContent()}
-							{current === steps.length - 1 && (
-								<Button href='/' type='primary' onClick={() => message.success('Processing complete!')}>
-									Вернуться на главную
-								</Button>
-							)}
+				<>
+					<div className='container'>
+						<div className='row'>
+							<h1>Новое объявление</h1>
+							<Steps current={current} onChange={onChange} items={steps} />
+							<div className='pt-5 col-6 mx-auto change__category__group'>
+								{StepContent()}
+								{current === steps.length - 1 && (
+									<Button
+										href='/'
+										type='primary'
+										onClick={() => message.success('Processing complete!')}
+									>
+										Вернуться на главную
+									</Button>
+								)}
+							</div>
 						</div>
 					</div>
-				</div>
+					<script src='/public/JS/owl.carousel.min.js'></script>
+					<script src='/public/JS/jquery.min.js'></script>
+					<script src='/public/JS/script.js'></script>
+				</>
 			)
 		else
 			return (

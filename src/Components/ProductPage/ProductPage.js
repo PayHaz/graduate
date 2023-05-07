@@ -1,12 +1,28 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import './ProductPage.css'
+import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
+import { Carousel } from 'react-responsive-carousel'
 
 const ProductPage = () => {
+	const [product, setProduct] = useState(null)
 	const [numberVisible, setNumberVisible] = useState(false)
+	const { id } = useParams()
 
 	const onTelButtonClick = () => {
 		setNumberVisible(true)
+	}
+
+	useEffect(() => {
+		fetch(`http://localhost:8000/product/${id}`)
+			.then((response) => response.json())
+			.then((data) => setProduct(data))
+			.catch((error) => console.log(error))
+	}, [id])
+
+	if (!product) {
+		return <p>Loading...</p>
 	}
 
 	const str = '+7 (912) 536-04-84'
@@ -38,88 +54,21 @@ const ProductPage = () => {
 			<div className='container'>
 				<div className='row'>
 					<div className='col-lg-8'>
-						<h1>Название товара</h1>
+						<h1>{product.name}</h1>
 						<div className='outer'>
-							<div id='big' className='owl-carousel owl-theme'>
-								<div className='item'>
-									<img
-										className='product-img'
-										src='https://akt22.ru/upload/iblock/58f/04zgbjpmdvpbwjr31mlo19p0naj29rvf.jpg'
-									></img>
-								</div>
-								<div className='item'>
-									<img
-										className='product-img'
-										src='https://www.championnet.ru/spree/products/132360/original/IMG_1065.JPG?1617084023'
-									></img>
-								</div>
-								<div className='item'>
-									<h1>3</h1>
-								</div>
-								<div className='item'>
-									<h1>4</h1>
-								</div>
-								<div className='item'>
-									<h1>5</h1>
-								</div>
-								<div className='item'>
-									<h1>6</h1>
-								</div>
-								<div className='item'>
-									<h1>7</h1>
-								</div>
-								<div className='item'>
-									<h1>8</h1>
-								</div>
-								<div className='item'>
-									<h1>9</h1>
-								</div>
-								<div className='item'>
-									<h1>10</h1>
-								</div>
-							</div>
-							<div id='thumbs' className='owl-carousel owl-theme'>
-								<div className='item'>
-									<img
-										className='product-img'
-										src='https://akt22.ru/upload/iblock/58f/04zgbjpmdvpbwjr31mlo19p0naj29rvf.jpg'
-									></img>
-								</div>
-								<div className='item'>
-									<img
-										className='product-img'
-										src='https://www.championnet.ru/spree/products/132360/original/IMG_1065.JPG?1617084023'
-									></img>
-								</div>
-								<div className='item'>
-									<h1>3</h1>
-								</div>
-								<div className='item'>
-									<h1>4</h1>
-								</div>
-								<div className='item'>
-									<h1>5</h1>
-								</div>
-								<div className='item'>
-									<h1>6</h1>
-								</div>
-								<div className='item'>
-									<h1>7</h1>
-								</div>
-								<div className='item'>
-									<h1>8</h1>
-								</div>
-								<div className='item'>
-									<h1>9</h1>
-								</div>
-								<div className='item'>
-									<h1>10</h1>
-								</div>
-							</div>
+							<Carousel showStatus={false} showIndicators={false} width={800}>
+								{product.images.map((image) => (
+									<div key={`http://localhost:8000${image}`}>
+										<img src={`http://localhost:8000${image}`} />
+									</div>
+								))}
+							</Carousel>
 						</div>
 					</div>
 					<div className='col'>
-						<h1>17000 ₽ в месяц</h1>
+						<h1>
+							{product.is_lower_bound ? 'От' : ''} {product.price} {product.price_suffix}
+						</h1>
 						<button type='button' className='phone_btn btn btn-primary btn-lg' onClick={onTelButtonClick}>
 							{ButtonTelContent()}
 						</button>
@@ -145,12 +94,7 @@ const ProductPage = () => {
 				<h3>Описание</h3>
 
 				<div className='col-lg-8'>
-					<p>
-						Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является
-						стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный
-						печатник создал большую коллекцию размеров и форм шрифтов, используя Lorem Ipsum для распечатки
-						образцов.
-					</p>
+					<p>{product.description}</p>
 				</div>
 			</div>
 		</>

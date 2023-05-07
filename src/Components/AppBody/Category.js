@@ -26,7 +26,7 @@ const Category = () => {
 
 	const Cat = categories.map((el) => {
 		return (
-			<div key={el.value} className={el.value > 5 ? 'col category pt-2' : 'col category'}>
+			<div key={el.value} className={el.value > 7 ? 'col category pt-2' : 'col category'}>
 				<a className='category__element' href='/'>
 					{el.label}
 				</a>

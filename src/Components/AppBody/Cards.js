@@ -64,7 +64,7 @@ const Cards = () => {
 
 					<div className='card-body'>
 						<h5 className='card-title'>
-							<a href='/' className='card__title'>
+							<a href={`http://localhost:3000/product/${el.id}`} className='card__title'>
 								{el.name}
 							</a>
 						</h5>
