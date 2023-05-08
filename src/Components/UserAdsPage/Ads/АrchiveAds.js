@@ -2,43 +2,89 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import { Dropdown, Button } from 'antd'
+import Cookies from 'js-cookie'
+import { useSelector } from 'react-redux'
 
 const АrchiveAds = () => {
 	const [data, setData] = useState([])
+	const adsTab = useSelector((state) => state.myAds.value)
 
 	async function fetchData() {
 		try {
-			const response = await fetch('http://localhost:1337/api/ads')
+			const response = await fetch('http://127.0.0.1:8000/product?status=AR', {
+				headers: {
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+			})
 			const responseData = await response.json()
-			const formattedData = responseData.data.map((obj) => ({
-				label: obj.attributes.label,
-				status: obj.attributes.status,
-				description: obj.attributes.description,
-				location: obj.attributes.location,
-				coast: obj.attributes.coast,
-				createdAt: obj.attributes.created_at,
-				updatedAt: obj.attributes.updated_at,
-				publishedAt: obj.attributes.published_at,
-				id: obj.id,
-			}))
-			setData(formattedData)
+			setData(responseData)
 		} catch (error) {
 			console.error(error)
 		}
 	}
 
+	async function changeProductStatus(id) {
+		const response = await fetch(`http://127.0.0.1:8000/product/${id}/`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${Cookies.get('token')}`,
+			},
+			body: JSON.stringify({
+				status: 'AC',
+			}),
+		})
+
+		if (!response.ok) {
+			throw new Error('Failed to change product status')
+		} else {
+			setData(data.filter((item) => item.id !== id))
+		}
+	}
+
+	async function deleteProduct(id) {
+		try {
+			const response = await fetch(`http://127.0.0.1:8000/product/${id}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+			})
+			if (response.ok) {
+				console.log('Продукт успешно удален')
+				setData(data.filter((item) => item.id !== id))
+			} else {
+				console.error('Ошибка удаления продукта')
+			}
+		} catch (error) {
+			console.error('Ошибка удаления продукта:', error)
+		}
+	}
+
 	useEffect(() => {
 		fetchData()
-	}, [])
+		if (adsTab) {
+			fetchData()
+		}
+	}, [adsTab])
 
 	const [selectedItem, setselectedItem] = useState()
 
 	const handleClick = (el) => {
-		setselectedItem(el.label)
+		setselectedItem(el.id)
+
 		console.log(el)
 	}
+
 	const onClick = ({ key }) => {
-		console.log(selectedItem, key)
+		if (key === '1') {
+			changeProductStatus(selectedItem)
+			console.log(selectedItem, key)
+		}
+		if (key === '3') {
+			deleteProduct(selectedItem)
+			console.log(selectedItem, key)
+		}
 	}
 
 	const items = [
@@ -64,12 +110,12 @@ const АrchiveAds = () => {
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>
-								<a href='/product'>{el.label}</a>
+								<a href='/product'>{el.name}</a>
 							</h5>
 							<Dropdown
 								menu={{
 									items,
-									onClick,
+									onClick: onClick, // передаем функцию handleClick
 								}}
 								placement='bottom'
 								arrow
@@ -82,9 +128,10 @@ const АrchiveAds = () => {
 								</a>
 							</Dropdown>
 						</div>
+
 						<p className='card-text'>{el.description}</p>
-						<p className='card-text'>{el.coast}</p>
-						<p className='card-text'>{el.location}</p>
+						<p className='card-text'>{el.price}</p>
+						<p className='card-text'>{el.city_name}</p>
 					</div>
 				</div>
 			</div>

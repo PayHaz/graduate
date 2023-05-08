@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react'
 import { Dropdown, Button } from 'antd'
 import '../UserAdsPage.css'
 import Cookies from 'js-cookie'
+import { useSelector } from 'react-redux'
 
 const ActiveAds = () => {
 	const [data, setData] = useState([])
+	const adsTab = useSelector((state) => state.myAds.value)
 
 	async function fetchData() {
 		try {
@@ -21,28 +23,55 @@ const ActiveAds = () => {
 		}
 	}
 
+	async function changeProductStatus(id) {
+		const response = await fetch(`http://127.0.0.1:8000/product/${id}/`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${Cookies.get('token')}`,
+			},
+			body: JSON.stringify({
+				status: 'AR',
+			}),
+		})
+
+		if (!response.ok) {
+			throw new Error('Failed to change product status')
+		} else {
+			setData(data.filter((item) => item.id !== id))
+		}
+	}
+
 	useEffect(() => {
 		fetchData()
-	}, [])
+		if (adsTab) {
+			fetchData()
+		}
+	}, [adsTab])
 
 	const [selectedItem, setselectedItem] = useState()
 
 	const handleClick = (el) => {
-		setselectedItem(el.label)
+		setselectedItem(el.id)
+
 		console.log(el)
 	}
+
 	const onClick = ({ key }) => {
-		console.log(selectedItem, key)
+		if (key === '1') {
+			changeProductStatus(selectedItem)
+			console.log(selectedItem, key)
+		}
 	}
 
 	const items = [
 		{
 			key: '1',
-			label: <a>Снять объявление</a>,
+			label: <p>Снять объявление</p>,
 		},
 		{
 			key: '2',
-			label: <a>Изменить</a>,
+			label: <p>Изменить</p>,
 		},
 	]
 
@@ -59,7 +88,7 @@ const ActiveAds = () => {
 							<Dropdown
 								menu={{
 									items,
-									onClick,
+									onClick: onClick, // передаем функцию handleClick
 								}}
 								placement='bottom'
 								arrow

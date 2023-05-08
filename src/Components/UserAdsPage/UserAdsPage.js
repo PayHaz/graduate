@@ -5,10 +5,8 @@ import АrchiveAds from './Ads/АrchiveAds'
 import Cookies from 'js-cookie'
 import { setToken } from '../../features/session/sessionSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { setMyAds } from '../../features/myads/myadsSlice'
 
-const onChange = (key) => {
-	console.log(key)
-}
 const items = [
 	{
 		key: '1',
@@ -24,6 +22,9 @@ const items = [
 
 const UserAdsPage = () => {
 	const dispatch = useDispatch()
+	const onChange = (key) => {
+		dispatch(setMyAds(key))
+	}
 	if (Cookies.get('token') !== undefined) {
 		dispatch(setToken(Cookies.get('token')))
 	}
