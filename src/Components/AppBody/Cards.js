@@ -30,9 +30,10 @@ const Cards = () => {
 			}
 		} else {
 			try {
-				const response = await fetch('http://127.0.0.1:8000/product')
+				const response = await fetch('http://127.0.0.1:8000/product?status=AC')
 				const data = await response.json()
 				setAllCards(data)
+				console.log(1)
 			} catch (error) {
 				console.log(error)
 			}

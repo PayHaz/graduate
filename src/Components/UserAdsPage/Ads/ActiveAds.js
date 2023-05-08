@@ -79,7 +79,7 @@ const ActiveAds = () => {
 		return (
 			<div className='col' key={index}>
 				<div className={index > 2 ? 'card mt-4' : 'card'}>
-					<img src='https://klike.net/uploads/posts/2020-07/1595055001_3.jpg' />
+					<img src={`http://localhost:8000${el.images[0]}`} />
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>

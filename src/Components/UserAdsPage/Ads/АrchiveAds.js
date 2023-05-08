@@ -105,8 +105,8 @@ const АrchiveAds = () => {
 	const card = data.map((el, index) => {
 		return (
 			<div className='col' key={index}>
-				<div className={index > 2 ? 'card mt-4' : 'card'}>
-					<img src='https://klike.net/uploads/posts/2020-07/1595055001_3.jpg' />
+				<div className={index > 2 ? 'card mt-4' : 'card h-100'}>
+					<img src={`http://localhost:8000${el.images[0]}`} />
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>
