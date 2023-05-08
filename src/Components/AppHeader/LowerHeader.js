@@ -8,37 +8,33 @@ import RentaruLogo from './img/RentaRu.png'
 import Cookies from 'js-cookie'
 import { setCity } from '../../features/city/citySlice'
 
-const getRandomInt = (max, min = 0) => Math.floor(Math.random() * (max - min + 1)) + min
-const searchResult = (query) =>
-	new Array(getRandomInt(5))
-		.join('.')
-		.split('.')
-		.map((_, idx) => {
-			const category = `${query}${idx}`
-			return {
-				value: category,
-				label: (
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-						}}
-					>
-						<span>
-							Найдено {query} on{' '}
-							<a
-								href={`https://s.taobao.com/search?q=${query}`}
-								target='_blank'
-								rel='noopener noreferrer'
-							>
-								{category}
-							</a>
-						</span>
-						<span>{getRandomInt(200, 100)} results</span>
-					</div>
-				),
-			}
-		})
+const searchResult = async (query) => {
+	const response = await fetch(
+		`http://localhost:8000/search/?name=${query}${Cookies.get('city_id') ? '&city=' + Cookies.get('city_id') : ''}`
+	)
+	const data = await response.json()
+	return data.map((product) => ({
+		value: product.name,
+		key: product.id,
+		label: (
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+				}}
+			>
+				<span>
+					<a href={`http://localhost:3000/product/${product.id}`} target='_blank' rel='noopener noreferrer'>
+						{product.name}
+					</a>
+				</span>
+				<span>
+					<p>{product.city_name}</p>
+				</span>
+			</div>
+		),
+	}))
+}
 
 const LowerHeader = () => {
 	const [options, setOptions] = useState([])
@@ -68,12 +64,20 @@ const LowerHeader = () => {
 		}
 	}
 
-	const handleSearch = (value) => {
-		setOptions(value ? searchResult(value) : [])
+	const handleSearch = async (value) => {
+		try {
+			const result = await searchResult(value)
+			setOptions(value ? result : [])
+			console.log(options)
+		} catch (error) {
+			console.log(error)
+		}
 	}
+
 	const onSelect = (value) => {
 		console.log('onSelect', value)
 	}
+
 	const onChange = (value) => {
 		console.log(value)
 	}
@@ -138,12 +142,7 @@ const LowerHeader = () => {
 							onSearch={handleSearch}
 							onChange={onChange}
 						>
-							<Input.Search
-								className='search_panel'
-								size='large'
-								placeholder='Поиск по объявлениям'
-								enterButton
-							/>
+							<Input.Search size='large' placeholder='Поиск по объявлениям' enterButton />
 						</AutoComplete>
 						<>
 							<Button type='text' onClick={showModal} style={{ marginLeft: '10px', fontSize: '17px' }}>

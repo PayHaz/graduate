@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from 'react'
-import { Dropdown, Button } from 'antd'
+import { Dropdown, Button, Modal } from 'antd'
 import '../UserAdsPage.css'
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
@@ -59,8 +59,15 @@ const ActiveAds = () => {
 
 	const onClick = ({ key }) => {
 		if (key === '1') {
-			changeProductStatus(selectedItem)
-			console.log(selectedItem, key)
+			Modal.confirm({
+				title: 'В архив',
+				content: 'Вы уверены, что хотите переместить объявление в архив?',
+				okText: 'Да',
+				cancelText: 'Нет',
+				onOk() {
+					changeProductStatus(selectedItem)
+				},
+			})
 		}
 	}
 
