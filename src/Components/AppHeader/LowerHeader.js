@@ -146,7 +146,7 @@ const LowerHeader = () => {
 							onChange={onChange}
 						>
 							<Space.Compact style={{ width: '100%' }}>
-								<Input size='large' placeholder='Поиск по объявлениям' enterButton />
+								<Input size='large' placeholder='Поиск по объявлениям' />
 								<Link to={`http://localhost:3000/search/${searchInput}`}>
 									<Button type='primary'>Найти</Button>
 								</Link>
