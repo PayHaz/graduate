@@ -22,9 +22,9 @@ const SearchPage = () => {
 	const endIndex = startIndex + pageSize
 	const cardsToShow = cards.slice(startIndex, endIndex)
 	const [priceRange, setPriceRange] = useState(null)
+	const [minPrice, setMinPrice] = useState(999999)
+	const [maxPrice, setMaxPrice] = useState(0)
 	const city = useSelector((state) => state.city.value)
-	const [minPrice, setMinPrice] = useState(Infinity)
-	const [maxPrice, setMaxPrice] = useState(-Infinity)
 
 	async function fetchCards() {
 		try {
@@ -36,31 +36,15 @@ const SearchPage = () => {
 				}`
 			)
 			const responseData = await response.json()
-			responseData.map((card) => {
-				console.log(card.price)
-				if (card.price) {
-					if (card.price < minPrice) {
-						setMinPrice(card.price)
-					}
-					if (card.price > maxPrice) {
-						setMaxPrice(card.price)
-					}
-				}
+			responseData.map((el) => {
+				if (el.min_price < minPrice) setMinPrice(el.min_price)
+
+				if (el.max_price > maxPrice) setMaxPrice(el.max_price)
 			})
 			setCards(responseData)
 		} catch (error) {
 			console.error(error)
 		}
-	}
-
-	const marks = {
-		minPrice: `${minPrice} ₽`,
-		maxPrice: {
-			style: {
-				width: '50px',
-			},
-			label: <strong>{maxPrice} ₽</strong>,
-		},
 	}
 
 	const handlePriceRangeChange = (value) => {
@@ -69,12 +53,11 @@ const SearchPage = () => {
 
 	const handleCategoryChange = (value) => {
 		setCategory(value)
+		fetchCards()
 	}
 
 	const handleApplyFilters = () => {
-		fetchCards(category)
-		console.log('min=' + minPrice)
-		console.log('max=' + maxPrice)
+		fetchCards()
 	}
 
 	const handlePageChange = (page) => {
@@ -168,10 +151,11 @@ const SearchPage = () => {
 								<p className='category__selector__label'>Цена:</p>
 								<Form.Item>
 									<Slider
+										className='slider-main-div'
+										min={minPrice}
+										max={maxPrice}
+										range={{ draggableTrack: true }}
 										onChange={handlePriceRangeChange}
-										range
-										value={[minPrice, maxPrice]}
-										marks={marks}
 										defaultValue={[minPrice, maxPrice]}
 									/>
 								</Form.Item>
