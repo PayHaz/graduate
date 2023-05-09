@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useCallback } from 'react'
-import { AutoComplete, Input, Form, Button, Select, Modal } from 'antd'
+import { AutoComplete, Input, Form, Button, Select, Modal, Space, Pagination } from 'antd'
 import { useState } from 'react'
 import './AppHeader.css'
 import { useDispatch } from 'react-redux'
 import RentaruLogo from './img/RentaRu.png'
+import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { setCity } from '../../features/city/citySlice'
 
@@ -42,6 +43,7 @@ const LowerHeader = () => {
 	const [selectedCity, setSelectedCity] = useState(null)
 	const [cities, setCities] = useState([])
 	const [cityName, setCityName] = useState()
+	const [searchInput, setSearchInput] = useState('')
 	const [open, setOpen] = useState(false)
 	const dispatch = useDispatch()
 
@@ -68,6 +70,7 @@ const LowerHeader = () => {
 		try {
 			const result = await searchResult(value)
 			setOptions(value ? result : [])
+			setSearchInput(value)
 			console.log(options)
 		} catch (error) {
 			console.log(error)
@@ -142,7 +145,12 @@ const LowerHeader = () => {
 							onSearch={handleSearch}
 							onChange={onChange}
 						>
-							<Input.Search size='large' placeholder='Поиск по объявлениям' enterButton />
+							<Space.Compact style={{ width: '100%' }}>
+								<Input size='large' placeholder='Поиск по объявлениям' enterButton />
+								<Link to={`http://localhost:3000/search/${searchInput}`}>
+									<Button type='primary'>Найти</Button>
+								</Link>
+							</Space.Compact>
 						</AutoComplete>
 						<>
 							<Button type='text' onClick={showModal} style={{ marginLeft: '10px', fontSize: '17px' }}>

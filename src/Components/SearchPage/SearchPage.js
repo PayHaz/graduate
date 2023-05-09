@@ -1,100 +1,84 @@
 import React, { useState, useEffect } from 'react'
-import { TreeSelect, Slider, Button, Form, Carousel } from 'antd'
+import { TreeSelect, Slider, Button, Form, Carousel, Pagination } from 'antd'
+import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import Cookies from 'js-cookie'
 import './SerachPage.css'
 
 const contentStyle = {
-	margin: 0,
-	height: '160px',
-	color: '#fff',
-	lineHeight: '160px',
-	textAlign: 'center',
-	background: '#364d79',
-}
-
-const onLoadCards = [
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '1',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '2',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '3',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '4',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '5',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '6',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '7',
-	},
-	{
-		label: 'Трактер',
-		description: 'Какое-то очень интересное описание трактера, который очень хороший и производительный',
-		location: 'Нижневартовск',
-		coast: '1000р',
-		key: '8',
-	},
-]
-
-const marks = {
-	0: '0 ₽',
-	100: {
-		style: {
-			width: '50px',
-		},
-		label: <strong>100 ₽</strong>,
-	},
+	height: '230px',
+	width: '100%',
 }
 
 const SearchPage = () => {
-	const [value, setValue] = useState()
-	const [inputValue, setInputValue] = useState(0)
-	const [allCards] = useState(onLoadCards)
+	const [value] = useState()
+	const [cards, setCards] = useState([])
+	const [currentPage, setCurrentPage] = useState(1)
 	const [data, setData] = useState([])
-	const onChange = (newValue) => {
-		setValue(newValue)
+	const { params } = useParams()
+	const [category, setCategory] = useState(null)
+	const pageSize = 12
+	const startIndex = (currentPage - 1) * pageSize
+	const endIndex = startIndex + pageSize
+	const cardsToShow = cards.slice(startIndex, endIndex)
+	const [priceRange, setPriceRange] = useState(null)
+	const city = useSelector((state) => state.city.value)
+	const [minPrice, setMinPrice] = useState(Infinity)
+	const [maxPrice, setMaxPrice] = useState(-Infinity)
+
+	async function fetchCards() {
+		try {
+			const response = await fetch(
+				`http://localhost:8000/search?name=${params}${
+					Cookies.get('city_id') ? '&city=' + Cookies.get('city_id') : ''
+				}${category ? '&category=' + category : ''}${
+					priceRange ? '&minRange=' + priceRange[0] + '&maxRange=' + priceRange[1] : ''
+				}`
+			)
+			const responseData = await response.json()
+			responseData.map((card) => {
+				console.log(card.price)
+				if (card.price) {
+					if (card.price < minPrice) {
+						setMinPrice(card.price)
+					}
+					if (card.price > maxPrice) {
+						setMaxPrice(card.price)
+					}
+				}
+			})
+			setCards(responseData)
+		} catch (error) {
+			console.error(error)
+		}
 	}
 
-	const onSliderChange = (value) => {
-		if (isNaN(value)) {
-			return
-		}
-		setInputValue(value)
-		console.log(value)
+	const marks = {
+		minPrice: `${minPrice} ₽`,
+		maxPrice: {
+			style: {
+				width: '50px',
+			},
+			label: <strong>{maxPrice} ₽</strong>,
+		},
+	}
+
+	const handlePriceRangeChange = (value) => {
+		setPriceRange(value)
+	}
+
+	const handleCategoryChange = (value) => {
+		setCategory(value)
+	}
+
+	const handleApplyFilters = () => {
+		fetchCards(category)
+		console.log('min=' + minPrice)
+		console.log('max=' + maxPrice)
+	}
+
+	const handlePageChange = (page) => {
+		setCurrentPage(page)
 	}
 
 	async function fetchData() {
@@ -109,35 +93,43 @@ const SearchPage = () => {
 
 	useEffect(() => {
 		fetchData()
-	}, [])
+		fetchCards()
+		if (city) {
+			fetchCards()
+		}
+	}, [city])
 
-	const card = allCards.map((el, index) => {
+	const productImages = (images) => {
+		return images.map((image, index) => (
+			<div key={index}>
+				<img style={contentStyle} src={`http://localhost:8000${image}`} />
+			</div>
+		))
+	}
+
+	const card = cardsToShow.map((el, index) => {
 		return (
-			<div className='col' key={index}>
-				<div className={index < 3 ? 'card' : 'card mt-5'}>
+			<div className='col pt-3' key={index}>
+				<div className='card  h-100'>
 					<Carousel autoplay autoplaySpeed={Math.random() * (6000 - 3000) + 3000}>
-						<div>
-							<h3 style={contentStyle}>1</h3>
-						</div>
-						<div>
-							<h3 style={contentStyle}>2</h3>
-						</div>
-						<div>
-							<h3 style={contentStyle}>3</h3>
-						</div>
-						<div>
-							<h3 style={contentStyle}>4</h3>
-						</div>
+						{productImages(el.images)}
 					</Carousel>
+
 					<div className='card-body'>
 						<h5 className='card-title'>
-							<a href='/' className='card__title'>
-								{el.label}
+							<a href={`http://localhost:3000/product/${el.id}`} className='card__title'>
+								{el.name}
 							</a>
 						</h5>
-						<p className='card-text'>{el.description}</p>
-						<p className='card-text'>{el.coast}</p>
-						<p className='card-text'>{el.location}</p>
+						<p className='card-text card-description'>{el.description}</p>
+					</div>
+					<div class='card-footer'>
+						<p className='card-text'>
+							{el.is_lower_bound ? 'от ' : ''}
+							{el.price}
+							{el.price_suffix ? ' ' + el.price_suffix : ''}
+						</p>
+						<p className='card-text card-city'>{el.city_name}</p>
 					</div>
 				</div>
 			</div>
@@ -167,7 +159,7 @@ const SearchPage = () => {
 										placeholder='Пожалуйста, выберите категорию'
 										allowClear
 										treeDefaultExpandAll
-										onChange={onChange}
+										onChange={handleCategoryChange}
 										treeData={data}
 									/>
 								</Form.Item>
@@ -175,20 +167,36 @@ const SearchPage = () => {
 							<div>
 								<p className='category__selector__label'>Цена:</p>
 								<Form.Item>
-									<Slider onChange={onSliderChange} range marks={marks} defaultValue={[0, 100]} />
+									<Slider
+										onChange={handlePriceRangeChange}
+										range
+										value={[minPrice, maxPrice]}
+										marks={marks}
+										defaultValue={[minPrice, maxPrice]}
+									/>
 								</Form.Item>
 							</div>
 							<div className=' filter__button'>
 								<Form.Item>
-									<Button type='primary'>Применить</Button>
+									<Button type='primary' onClick={handleApplyFilters}>
+										Применить
+									</Button>
 								</Form.Item>
 							</div>
 						</Form>
 					</div>
 					<div className='col-9'>
 						<div className='px-4'>
+							<h1>Поиск: {params}</h1>
 							<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>{card}</div>
 						</div>
+						<Pagination
+							current={currentPage}
+							onChange={handlePageChange}
+							pageSize={pageSize}
+							total={cards.length}
+							style={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+						/>
 					</div>
 				</div>
 			</div>
