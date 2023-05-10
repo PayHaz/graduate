@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { TreeSelect, Slider, Button, Form, Carousel, Pagination } from 'antd'
+import { Carousel, Pagination } from 'antd'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Cookies from 'js-cookie'
 
 const contentStyle = {
@@ -18,7 +19,8 @@ const CategoryPage = () => {
 	const endIndex = startIndex + pageSize
 	const cardsToShow = cards.slice(startIndex, endIndex)
 	const city = useSelector((state) => state.city.value)
-	const [category, setCategory] = useState()
+	let parentCategory = ''
+	const [category, setCategory] = useState([])
 
 	async function fetchCategories() {
 		try {
@@ -55,6 +57,18 @@ const CategoryPage = () => {
 			fetchCards()
 		}
 	}, [city])
+
+	const Cat = category.map((el) => {
+		if (el.value !== parseInt(params)) {
+			return (
+				<div key={el.value} className={el.value > 7 ? 'col category pt-2' : 'col category'}>
+					<a className='category__element' href={`http://localhost:3000/category/${el.value}`}>
+						{el.title}
+					</a>
+				</div>
+			)
+		} else parentCategory = el.title
+	})
 
 	const productImages = (images) => {
 		return images.map((image, index) => (
@@ -99,7 +113,8 @@ const CategoryPage = () => {
 				<div className='row'>
 					<div className='col-12'>
 						<div className='px-4'>
-							<div className='row row-cols-lg-5 cat'></div>
+							<div className='row row-cols-lg-5 cat pt-3 d-flex justify-content-center'>{Cat}</div>
+							<h3 className='pt-4'>Категория: {parentCategory}</h3>
 							<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>{card}</div>
 						</div>
 						<Pagination

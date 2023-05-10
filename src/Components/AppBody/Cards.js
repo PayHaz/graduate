@@ -6,7 +6,7 @@ import './carousel.css'
 import Cookies from 'js-cookie'
 
 const contentStyle = {
-	height: '230px',
+	height: '270px',
 	width: '100%',
 }
 

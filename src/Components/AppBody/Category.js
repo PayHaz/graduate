@@ -26,8 +26,8 @@ const Category = () => {
 
 	const Cat = categories.map((el) => {
 		return (
-			<div key={el.value} className={el.value > 7 ? 'col category pt-2' : 'col category'}>
-				<a className='category__element' href='/'>
+			<div key={el.value} className={el.value > 7 ? 'col category pt-4' : 'col category'}>
+				<a className='category__element' href={`http://localhost:3000/category/${el.value}`}>
 					{el.label}
 				</a>
 			</div>
@@ -36,7 +36,7 @@ const Category = () => {
 
 	return (
 		<div className='container'>
-			<div className='row row-cols-lg-5 cat'>{Cat}</div>
+			<div className='row row-cols-lg-5 cat d-flex justify-content-center'>{Cat}</div>
 		</div>
 	)
 }

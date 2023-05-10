@@ -5,6 +5,11 @@ import '../UserAdsPage.css'
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
 
+const contentStyle = {
+	height: '270px',
+	width: '100%',
+}
+
 const ActiveAds = () => {
 	const [data, setData] = useState([])
 	const adsTab = useSelector((state) => state.myAds.value)
@@ -85,12 +90,14 @@ const ActiveAds = () => {
 	const card = data.map((el, index) => {
 		return (
 			<div className='col' key={index}>
-				<div className={index > 2 ? 'card mt-4' : 'card'}>
-					<img src={`http://localhost:8000${el.images[0]}`} />
+				<div className='card  h-100'>
+					<img style={contentStyle} src={`http://localhost:8000${el.images[0]}`} />
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>
-								<a href='/product'>{el.name}</a>
+								<a href={`http://localhost:3000/product/${el.id}`} className='card__title'>
+									{el.name}
+								</a>
 							</h5>
 							<Dropdown
 								menu={{
@@ -109,9 +116,15 @@ const ActiveAds = () => {
 							</Dropdown>
 						</div>
 
-						<p className='card-text'>{el.description}</p>
-						<p className='card-text'>{el.price}</p>
-						<p className='card-text'>{el.city_name}</p>
+						<p className='card-text card-description'>{el.description}</p>
+					</div>
+					<div class='card-footer'>
+						<p className='card-text'>
+							{el.is_lower_bound ? 'от ' : ''}
+							{el.price}
+							{el.price_suffix ? ' ' + el.price_suffix : ''}
+						</p>
+						<p className='card-text card-city'>{el.city_name}</p>
 					</div>
 				</div>
 			</div>
