@@ -10,6 +10,7 @@ import UserAdsPage from './UserAdsPage/UserAdsPage'
 import AddItemPage from './AddItemPage/AddItemPage'
 import { ConfigProvider } from 'antd'
 import SearchPage from './SearchPage/SearchPage'
+import CategoryPage from './CategoryPage/CategoryPage'
 
 const App = () => {
 	return (
@@ -31,6 +32,7 @@ const App = () => {
 							<Route path='ads' element={<UserAdsPage />} />
 							<Route path='additem' element={<AddItemPage />} />
 							<Route path='search/:params' element={<SearchPage />} />
+							<Route path='category/:params' element={<CategoryPage />} />
 						</Route>
 					</Routes>
 				</Provider>
