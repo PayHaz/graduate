@@ -16,7 +16,7 @@ const items = [
 	{
 		key: '1',
 		label: (
-			<a rel='noopener noreferrer' href='ads'>
+			<a rel='noopener noreferrer' href='http://localhost:3000/ads'>
 				Мои объявления
 			</a>
 		),
