@@ -48,9 +48,9 @@ const Cards = () => {
 	}, [city])
 
 	const productImages = (images) => {
-		return images.map((image, index) => (
-			<div key={index}>
-				<img style={contentStyle} src={`http://localhost:8000${image}`} />
+		return images.map((image) => (
+			<div key={image.id}>
+				<img style={contentStyle} src={`http://localhost:8000${image.img}`} />
 			</div>
 		))
 	}

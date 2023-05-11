@@ -63,6 +63,7 @@ const ActiveAds = () => {
 	}
 
 	const onClick = ({ key }) => {
+		console.log()
 		if (key === '1') {
 			Modal.confirm({
 				title: 'В архив',
@@ -91,7 +92,7 @@ const ActiveAds = () => {
 		return (
 			<div className='col' key={index}>
 				<div className='card  h-100'>
-					<img style={contentStyle} src={`http://localhost:8000${el.images[0]}`} />
+					<img style={contentStyle} src={`http://localhost:8000${el.images[0].img}`} />
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>

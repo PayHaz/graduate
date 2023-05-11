@@ -24,19 +24,29 @@ const EditProductPage = () => {
 	const [fileList, setFileList] = useState([])
 
 	useEffect(() => {
-		fetch(`http://localhost:8000/product/${productId}`)
+		fetch(`http://localhost:8000/product/${productId}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${Cookies.get('token')}`,
+			},
+		})
 			.then((response) => response.json())
 			.then((data) => {
 				setProduct(data)
 				setName(data.name)
 				setDescription(data.description)
 				setPrice(data.price)
-				const images = data.images.map((image, index) => ({
-					uid: `-${index}`,
-					name: `image-${index}.png`,
-					status: 'done',
-					url: 'http://localhost:8000' + image,
-				}))
+				console.log(data.images)
+				const images = data.images.map(
+					(image, index) => ({
+						id: image.id,
+						uid: `-${index}`,
+						name: `image-${index}.png`,
+						status: 'done',
+						url: 'http://localhost:8000' + image.img,
+					}),
+					console.log(data.images)
+				)
 				setFileList(images)
 			})
 			.catch((error) => console.error(error))
@@ -97,6 +107,27 @@ const EditProductPage = () => {
 		return <div>Loading...</div>
 	}
 
+	const handleRemove = (file) => {
+		const product_id = productId
+		const image_id = file.id
+		console.log(file.id)
+		fetch(`http://localhost:8000/products/${product_id}/images/${file.id}/`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${Cookies.get('token')}`,
+			},
+		})
+			.then((response) => {
+				if (response.status === 204) {
+					console.log('Image deleted successfully')
+				} else {
+					console.error('Failed to delete image')
+				}
+			})
+			.catch((error) => console.error(error))
+	}
+
 	const uploadButton = (
 		<div>
 			<PlusOutlined />
@@ -117,11 +148,16 @@ const EditProductPage = () => {
 					<form>
 						<div className='form-group text-center mb-3'>
 							<Upload
-								action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+								action={`http://localhost:8000/product/${productId}/image`}
+								name='images'
 								listType='picture-card'
 								fileList={fileList}
 								onPreview={handlePreview}
 								onChange={handleChange}
+								onRemove={handleRemove}
+								headers={{
+									Authorization: `Bearer ${Cookies.get('token')}`,
+								}}
 							>
 								{fileList.length >= 8 ? null : uploadButton}
 							</Upload>
@@ -163,9 +199,9 @@ const EditProductPage = () => {
 							/>
 						</div>
 						<div className='form-group text-center'>
-							<button type='submit' className='btn btn-primary' onClick={handleUpdateClick}>
+							<Button type='primary' onClick={handleUpdateClick}>
 								Изменить
-							</button>
+							</Button>
 						</div>
 					</form>
 				</div>

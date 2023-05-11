@@ -148,21 +148,9 @@ const AddItemPage = () => {
 		</div>
 	)
 
-	const handleUpload = async () => {
-		const formData = new FormData()
-		fileList.forEach((file) => {
-			formData.append('images', file.originFileObj)
-		})
-		const response = await fetch('http://localhost:8000/product/' + uploadProduct + '/image', {
-			method: 'POST',
-			body: formData,
-		})
-		if (response.status === 201) {
-			next()
-			message.success('Фотографии успешно загружены!')
-		} else {
-			message.error('Печалька :c')
-		}
+	const handleUpload = async (e) => {
+		e.preventDefault()
+		next()
 	}
 
 	const StepContent = () => {
@@ -185,11 +173,16 @@ const AddItemPage = () => {
 					<h3>Загрузите фотографии:</h3>
 					<div>
 						<Upload
+							action={`http://localhost:8000/product/${uploadProduct}/image`}
+							name='images'
 							listType='picture-card'
 							fileList={fileList}
 							onPreview={handlePreview}
-							beforeUpload={() => false}
+							//beforeUpload={() => false}
 							onChange={handleChange}
+							headers={{
+								Authorization: `Bearer ${Cookies.get('token')}`,
+							}}
 						>
 							{fileList.length >= 8 ? null : uploadButton}
 						</Upload>
@@ -237,9 +230,6 @@ const AddItemPage = () => {
 							</div>
 						</div>
 					</div>
-					<script src='/public/JS/owl.carousel.min.js'></script>
-					<script src='/public/JS/jquery.min.js'></script>
-					<script src='/public/JS/script.js'></script>
 				</>
 			)
 		else

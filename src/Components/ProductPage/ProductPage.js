@@ -58,8 +58,8 @@ const ProductPage = () => {
 						<div className='outer'>
 							<Carousel showStatus={false} showIndicators={false} width={800}>
 								{product.images.map((image) => (
-									<div key={`http://localhost:8000${image}`}>
-										<img src={`http://localhost:8000${image}`} />
+									<div key={`http://localhost:8000${image.img}`}>
+										<img src={`http://localhost:8000${image.img}`} />
 									</div>
 								))}
 							</Carousel>

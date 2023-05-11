@@ -85,7 +85,7 @@ const SearchPage = () => {
 	const productImages = (images) => {
 		return images.map((image, index) => (
 			<div key={index}>
-				<img style={contentStyle} src={`http://localhost:8000${image}`} />
+				<img style={contentStyle} src={`http://localhost:8000${image.img}`} />
 			</div>
 		))
 	}
