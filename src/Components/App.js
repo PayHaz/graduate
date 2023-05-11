@@ -11,6 +11,7 @@ import AddItemPage from './AddItemPage/AddItemPage'
 import { ConfigProvider } from 'antd'
 import SearchPage from './SearchPage/SearchPage'
 import CategoryPage from './CategoryPage/CategoryPage'
+import EditProductPage from './EditProductPage/EditProductPage'
 
 const App = () => {
 	return (
@@ -33,6 +34,7 @@ const App = () => {
 							<Route path='additem' element={<AddItemPage />} />
 							<Route path='search/:params' element={<SearchPage />} />
 							<Route path='category/:params' element={<CategoryPage />} />
+							<Route path='edit/:productId' element={<EditProductPage />} />
 						</Route>
 					</Routes>
 				</Provider>
