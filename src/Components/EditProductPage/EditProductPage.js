@@ -1,8 +1,43 @@
 import React, { useState, useEffect } from 'react'
-import { Input, Button, Upload, Modal } from 'antd'
+import { Input, Button, Space, Select, InputNumber, Checkbox, Upload, Modal } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 import Cookies from 'js-cookie'
+
+const options = [
+	{
+		value: 'N',
+		label: 'рублей',
+	},
+	{
+		value: 'S',
+		label: 'за услугу',
+	},
+	{
+		value: 'H',
+		label: 'за час',
+	},
+	{
+		value: 'U',
+		label: 'за единицу',
+	},
+	{
+		value: 'D',
+		label: 'за день',
+	},
+	{
+		value: 'MT',
+		label: 'за месяц',
+	},
+	{
+		value: 'M2',
+		label: 'за м^2',
+	},
+	{
+		value: 'M',
+		label: 'за метр',
+	},
+]
 
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
@@ -21,7 +56,30 @@ const EditProductPage = () => {
 	const [previewOpen, setPreviewOpen] = useState(false)
 	const [previewImage, setPreviewImage] = useState('')
 	const [previewTitle, setPreviewTitle] = useState('')
+	const [checked, setChecked] = useState(true)
 	const [fileList, setFileList] = useState([])
+	const [productCity, setProductCity] = useState('')
+	const [cities, setCities] = useState([])
+	const { TextArea } = Input
+	const [selectedValue, setSelectedValue] = useState()
+
+	const fetchData = async () => {
+		try {
+			const response = await fetch('http://127.0.0.1:8000/city')
+			const responseData = await response.json()
+			const formatedData = responseData.map((obj) => ({
+				value: obj.id,
+				label: obj.name,
+			}))
+			setCities(formatedData)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
 
 	useEffect(() => {
 		fetch(`http://localhost:8000/product/${productId}`, {
@@ -36,6 +94,9 @@ const EditProductPage = () => {
 				setName(data.name)
 				setDescription(data.description)
 				setPrice(data.price)
+				setProductCity(data.city_id)
+				setChecked(data.is_lower_bound)
+				setSelectedValue(data.price_suffix)
 				console.log(data.images)
 				const images = data.images.map(
 					(image, index) => ({
@@ -60,8 +121,21 @@ const EditProductPage = () => {
 		setDescription(event.target.value)
 	}
 
+	const handleCityChange = (value) => {
+		console.log(value)
+		setProductCity(value)
+	}
+
+	const handleCheckChange = (value) => {
+		setChecked(value.target.checked)
+	}
+
 	const handlePriceChange = (event) => {
 		setPrice(event.target.value)
+	}
+
+	const onSelectChange = (value) => {
+		setSelectedValue(value)
 	}
 
 	const handleUpdateClick = () => {
@@ -75,6 +149,9 @@ const EditProductPage = () => {
 				name,
 				description,
 				price,
+				city_id: productCity,
+				is_lower_bound: checked,
+				price_suffix: selectedValue,
 			}),
 		})
 			.then((response) => {
@@ -170,6 +247,15 @@ const EditProductPage = () => {
 									src={previewImage}
 								/>
 							</Modal>
+							<label htmlFor='name'>Город</label>
+							<Select
+								showSearch
+								placeholder='Выберите город'
+								defaultValue={productCity}
+								onChange={handleCityChange}
+								style={{ width: '100%' }}
+								options={cities}
+							></Select>
 							<label htmlFor='name'>Название</label>
 							<Input
 								type='text'
@@ -181,22 +267,36 @@ const EditProductPage = () => {
 						</div>
 						<div className='form-group text-center mb-3'>
 							<label htmlFor='description'>Описание</label>
-							<textarea
-								className='form-control'
-								id='description'
+							<TextArea
+								name='description'
 								value={description}
 								onChange={handleDescriptionChange}
+								placeholder='Введите описание'
+								className='form-control'
+								maxLength={1000}
 							/>
 						</div>
 						<div className='form-group text-center mb-3'>
 							<label htmlFor='price'>Цена</label>
-							<Input
-								type='number'
-								className='form-control'
-								id='price'
-								value={price}
-								onChange={handlePriceChange}
-							/>
+							<Space.Compact>
+								<InputNumber
+									id='price'
+									placeholder='Введите стоимость'
+									value={price}
+									onChange={handlePriceChange}
+									style={{ width: '200px' }}
+								/>
+								<Select
+									value={selectedValue}
+									defaultValue={'N'}
+									onChange={onSelectChange}
+									options={options}
+									style={{ width: '125px' }}
+								/>
+							</Space.Compact>
+							<Checkbox checked={checked} onChange={handleCheckChange}>
+								Это начальная стоимость
+							</Checkbox>
 						</div>
 						<div className='form-group text-center'>
 							<Button type='primary' onClick={handleUpdateClick}>
