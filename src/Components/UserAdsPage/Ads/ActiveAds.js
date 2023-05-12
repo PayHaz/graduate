@@ -4,6 +4,7 @@ import { Dropdown, Button, Modal } from 'antd'
 import '../UserAdsPage.css'
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const contentStyle = {
 	height: '270px',
@@ -74,6 +75,11 @@ const ActiveAds = () => {
 					changeProductStatus(selectedItem)
 				},
 			})
+		}
+		if (key === '2') {
+			if (key === '2') {
+				window.location.href = `http://localhost:3000/edit/product/${selectedItem}`
+			}
 		}
 	}
 

@@ -3,6 +3,8 @@ import { Input, Button, Space, Select, InputNumber, Checkbox, Upload, Modal } fr
 import { PlusOutlined } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { message } from 'antd'
+import './EditProductPage.css'
 
 const options = [
 	{
@@ -81,15 +83,16 @@ const EditProductPage = () => {
 		fetchData()
 	}, [])
 
-	useEffect(() => {
-		fetch(`http://localhost:8000/product/${productId}`, {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${Cookies.get('token')}`,
-			},
-		})
-			.then((response) => response.json())
-			.then((data) => {
+	async function fetchProduct() {
+		try {
+			const response = await fetch(`http://localhost:8000/product/${productId}`, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+			})
+			if (response.status === 200) {
+				const data = await response.json()
 				setProduct(data)
 				setName(data.name)
 				setDescription(data.description)
@@ -97,20 +100,25 @@ const EditProductPage = () => {
 				setProductCity(data.city_id)
 				setChecked(data.is_lower_bound)
 				setSelectedValue(data.price_suffix)
-				console.log(data.images)
-				const images = data.images.map(
-					(image, index) => ({
-						id: image.id,
-						uid: `-${index}`,
-						name: `image-${index}.png`,
-						status: 'done',
-						url: 'http://localhost:8000' + image.img,
-					}),
-					console.log(data.images)
-				)
+				const images = data.images.map((image, index) => ({
+					id: image.id,
+					uid: -index,
+					name: `image-${index}.png`,
+					status: 'done',
+					url: 'http://localhost:8000' + image.img,
+				}))
 				setFileList(images)
-			})
-			.catch((error) => console.error(error))
+			} else {
+				throw new Error('Ошибка загрузки продукта')
+			}
+		} catch (error) {
+			console.error(error)
+			message.error('Ошибка загрузки продукта')
+		}
+	}
+
+	useEffect(() => {
+		fetchProduct()
 	}, [productId])
 
 	const handleNameChange = (event) => {
@@ -156,6 +164,7 @@ const EditProductPage = () => {
 		})
 			.then((response) => {
 				if (response.ok) {
+					message.success('Продукт успешно изменён!')
 					return response.json()
 				} else {
 					throw new Error('Failed to update product.')
@@ -276,9 +285,9 @@ const EditProductPage = () => {
 								maxLength={1000}
 							/>
 						</div>
-						<div className='form-group text-center mb-3'>
+						<div className='form-group text-center mb-3 price__group'>
 							<label htmlFor='price'>Цена</label>
-							<Space.Compact>
+							<Space.Compact className='mt-2'>
 								<InputNumber
 									id='price'
 									placeholder='Введите стоимость'
@@ -294,7 +303,7 @@ const EditProductPage = () => {
 									style={{ width: '125px' }}
 								/>
 							</Space.Compact>
-							<Checkbox checked={checked} onChange={handleCheckChange}>
+							<Checkbox checked={checked} onChange={handleCheckChange} className='mt-2'>
 								Это начальная стоимость
 							</Checkbox>
 						</div>
