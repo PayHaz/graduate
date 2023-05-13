@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
-import { Dropdown, Button } from 'antd'
+import { Dropdown, Button, Modal } from 'antd'
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
 
@@ -86,9 +86,21 @@ const АrchiveAds = () => {
 			changeProductStatus(selectedItem)
 			console.log(selectedItem, key)
 		}
+		if (key === '2') {
+			if (key === '2') {
+				window.location.href = `http://localhost:3000/edit/product/${selectedItem}`
+			}
+		}
 		if (key === '3') {
-			deleteProduct(selectedItem)
-			console.log(selectedItem, key)
+			Modal.confirm({
+				title: 'Удалить объявление',
+				content: 'Вы уверены, что хотите удалить объявление?',
+				okText: 'Да',
+				cancelText: 'Нет',
+				onOk() {
+					deleteProduct(selectedItem)
+				},
+			})
 		}
 	}
 
@@ -103,7 +115,7 @@ const АrchiveAds = () => {
 		},
 		{
 			key: '3',
-			label: <a>Удлить</a>,
+			label: <a>Удалить</a>,
 		},
 	]
 

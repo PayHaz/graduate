@@ -117,6 +117,7 @@ const AddItemPage = () => {
 				price_suffix: values.price_suffix,
 				price: values.price,
 				city: values.city,
+				features: values.features,
 			})
 			next()
 		}

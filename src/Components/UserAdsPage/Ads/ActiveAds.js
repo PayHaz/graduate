@@ -86,11 +86,11 @@ const ActiveAds = () => {
 	const items = [
 		{
 			key: '1',
-			label: <p>Снять объявление</p>,
+			label: <a>Снять объявление</a>,
 		},
 		{
 			key: '2',
-			label: <p>Изменить</p>,
+			label: <a>Редактировать</a>,
 		},
 	]
 

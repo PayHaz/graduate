@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Input, Button, Space, Select, InputNumber, Checkbox, Upload, Modal } from 'antd'
-import { PlusOutlined } from '@ant-design/icons'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 import Cookies from 'js-cookie'
-import { message } from 'antd'
+import { message, TreeSelect, Form } from 'antd'
 import './EditProductPage.css'
 
 const options = [
@@ -60,10 +60,14 @@ const EditProductPage = () => {
 	const [previewTitle, setPreviewTitle] = useState('')
 	const [checked, setChecked] = useState(true)
 	const [fileList, setFileList] = useState([])
+	const [categoryValue, setCategoryValue] = useState()
 	const [productCity, setProductCity] = useState('')
+	const [category, setCategory] = useState([])
 	const [cities, setCities] = useState([])
 	const { TextArea } = Input
 	const [selectedValue, setSelectedValue] = useState()
+	const [initialValues, setInitialValues] = useState([])
+	const [formData, setFormData] = useState([])
 
 	const fetchData = async () => {
 		try {
@@ -98,7 +102,10 @@ const EditProductPage = () => {
 				setDescription(data.description)
 				setPrice(data.price)
 				setProductCity(data.city_id)
+				setCategoryValue(data.category)
 				setChecked(data.is_lower_bound)
+				const features = data.features.map((item) => ({ name: item.name, value: item.value }))
+				setInitialValues({ features: features })
 				setSelectedValue(data.price_suffix)
 				const images = data.images.map((image, index) => ({
 					id: image.id,
@@ -112,12 +119,34 @@ const EditProductPage = () => {
 				throw new Error('Ошибка загрузки продукта')
 			}
 		} catch (error) {
-			console.error(error)
+			console.log(error)
 			message.error('Ошибка загрузки продукта')
 		}
 	}
 
+	async function fetchCategory() {
+		try {
+			const response = await fetch('http://localhost:8000/category/tree')
+			const responseData = await response.json()
+			setCategory(responseData)
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	useEffect(() => {
+		if (formData !== undefined) {
+			handleUpdateClick()
+		}
+	}, [formData])
+
+	const onFinish = (values) => {
+		console.log(values)
+		setFormData(values)
+	}
+
+	useEffect(() => {
+		fetchCategory()
 		fetchProduct()
 	}, [productId])
 
@@ -130,7 +159,6 @@ const EditProductPage = () => {
 	}
 
 	const handleCityChange = (value) => {
-		console.log(value)
 		setProductCity(value)
 	}
 
@@ -138,12 +166,16 @@ const EditProductPage = () => {
 		setChecked(value.target.checked)
 	}
 
-	const handlePriceChange = (event) => {
-		setPrice(event.target.value)
+	const handlePriceChange = (value) => {
+		setPrice(value)
 	}
 
 	const onSelectChange = (value) => {
 		setSelectedValue(value)
+	}
+
+	const onCategoryChange = (newValue) => {
+		setCategoryValue(newValue)
 	}
 
 	const handleUpdateClick = () => {
@@ -160,6 +192,8 @@ const EditProductPage = () => {
 				city_id: productCity,
 				is_lower_bound: checked,
 				price_suffix: selectedValue,
+				category: categoryValue,
+				features: formData.features,
 			}),
 		})
 			.then((response) => {
@@ -190,13 +224,11 @@ const EditProductPage = () => {
 	const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
 
 	if (!product) {
-		return <div>Loading...</div>
+		return <div className='container'>Loading...</div>
 	}
 
 	const handleRemove = (file) => {
 		const product_id = productId
-		const image_id = file.id
-		console.log(file.id)
 		fetch(`http://localhost:8000/products/${product_id}/images/${file.id}/`, {
 			method: 'DELETE',
 			headers: {
@@ -231,7 +263,13 @@ const EditProductPage = () => {
 		<div className='container'>
 			<div className='row justify-content-center'>
 				<div className='col-md-6'>
-					<form>
+					<Form
+						name='dynamic_form_nest_item'
+						style={{ maxWidth: 600 }}
+						autoComplete='off'
+						initialValues={initialValues}
+						onFinish={onFinish}
+					>
 						<div className='form-group text-center mb-3'>
 							<Upload
 								action={`http://localhost:8000/product/${productId}/image`}
@@ -256,6 +294,23 @@ const EditProductPage = () => {
 									src={previewImage}
 								/>
 							</Modal>
+							<label htmlFor='name'>Категория</label>
+							<TreeSelect
+								showSearch
+								style={{
+									width: '100%',
+								}}
+								value={categoryValue}
+								dropdownStyle={{
+									maxHeight: 400,
+									overflow: 'auto',
+								}}
+								placeholder='Пожалуйста, выберите категорию'
+								allowClear
+								treeDefaultExpandAll
+								onChange={onCategoryChange}
+								treeData={category}
+							/>
 							<label htmlFor='name'>Город</label>
 							<Select
 								showSearch
@@ -273,6 +328,62 @@ const EditProductPage = () => {
 								value={name}
 								onChange={handleNameChange}
 							/>
+						</div>
+						<div className='row'>
+							<label className='next__step mb-2'>Характеристики:</label>
+
+							<Form.List name='features'>
+								{(fields, { add, remove }) => (
+									<>
+										{fields.map(({ key, name, ...restField }, index) => {
+											const feature = initialValues.features[index] || { name: '', value: '' }
+											return (
+												<Space
+													key={key}
+													style={{
+														display: 'flex',
+														marginBottom: 8,
+														justifyContent: 'center',
+													}}
+													align='baseline'
+													className={key === 0 ? 'pt-3' : ''}
+												>
+													<Form.Item
+														{...restField}
+														name={[name, 'name']}
+														rules={[
+															{
+																required: true,
+																message: 'Введите параметр',
+															},
+														]}
+													>
+														<Input placeholder='Введите параметр' />
+													</Form.Item>
+													<Form.Item
+														{...restField}
+														name={[name, 'value']}
+														rules={[
+															{
+																required: true,
+																message: 'Введите характеристику',
+															},
+														]}
+													>
+														<Input placeholder='Введите характеристику' />
+													</Form.Item>
+													<MinusCircleOutlined onClick={() => remove(name)} />
+												</Space>
+											)
+										})}
+										<Form.Item>
+											<Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />}>
+												Добавить характеристику
+											</Button>
+										</Form.Item>
+									</>
+								)}
+							</Form.List>
 						</div>
 						<div className='form-group text-center mb-3'>
 							<label htmlFor='description'>Описание</label>
@@ -307,12 +418,14 @@ const EditProductPage = () => {
 								Это начальная стоимость
 							</Checkbox>
 						</div>
-						<div className='form-group text-center'>
-							<Button type='primary' onClick={handleUpdateClick}>
-								Изменить
-							</Button>
-						</div>
-					</form>
+						<Form.Item>
+							<div className='form-group text-center'>
+								<Button type='primary' htmlType='submit'>
+									Изменить
+								</Button>
+							</div>
+						</Form.Item>
+					</Form>
 				</div>
 			</div>
 		</div>
