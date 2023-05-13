@@ -16,7 +16,7 @@ const АrchiveAds = () => {
 
 	async function fetchData() {
 		try {
-			const response = await fetch('http://127.0.0.1:8000/product?status=AR', {
+			const response = await fetch('http://127.0.0.1:8000/product?own=false&status=AR', {
 				headers: {
 					Authorization: `Bearer ${Cookies.get('token')}`,
 				},
