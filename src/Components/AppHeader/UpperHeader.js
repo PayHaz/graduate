@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
@@ -8,7 +9,7 @@ import { useLocation } from 'react-router-dom'
 import LoginModal from '../LoginModal/LoginModal'
 import { useDispatch } from 'react-redux'
 import Cookies from 'js-cookie'
-import { deleteToken, setToken } from '../../features/session/sessionSlice'
+import { deleteToken } from '../../features/session/sessionSlice'
 
 const { useToken } = theme
 
@@ -32,14 +33,12 @@ const items = [
 	{
 		key: '3',
 		label: (
-			<a target='_blank' rel='noopener noreferrer' href='https://www.luohanacademy.com'>
+			<a rel='noopener noreferrer' href='/favorite'>
 				Избранное
 			</a>
 		),
 	},
 ]
-
-const defaultData = [{}]
 
 const UpperHeader = () => {
 	const [visible, setVisible] = useState(false)

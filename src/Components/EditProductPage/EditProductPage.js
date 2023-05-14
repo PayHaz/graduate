@@ -4,6 +4,8 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useParams } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { message, TreeSelect, Form } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import { setToken } from '../../features/session/sessionSlice'
 import './EditProductPage.css'
 
 const options = [
@@ -68,6 +70,11 @@ const EditProductPage = () => {
 	const [selectedValue, setSelectedValue] = useState()
 	const [initialValues, setInitialValues] = useState([])
 	const [formData, setFormData] = useState([])
+	const dispatch = useDispatch()
+	if (Cookies.get('token') !== undefined) {
+		dispatch(setToken(Cookies.get('token')))
+	}
+	const session = useSelector((state) => state.session.value)
 
 	const fetchData = async () => {
 		try {
@@ -85,6 +92,9 @@ const EditProductPage = () => {
 
 	useEffect(() => {
 		fetchData()
+		if (session) {
+			fetchData()
+		}
 	}, [])
 
 	async function fetchProduct() {
@@ -148,6 +158,10 @@ const EditProductPage = () => {
 	useEffect(() => {
 		fetchCategory()
 		fetchProduct()
+		if (session) {
+			fetchCategory()
+			fetchProduct()
+		}
 	}, [productId])
 
 	const handleNameChange = (event) => {
@@ -259,177 +273,191 @@ const EditProductPage = () => {
 		</div>
 	)
 
-	return (
-		<div className='container'>
-			<div className='row justify-content-center'>
-				<div className='col-md-6'>
-					<Form
-						name='dynamic_form_nest_item'
-						style={{ maxWidth: 600 }}
-						autoComplete='off'
-						initialValues={initialValues}
-						onFinish={onFinish}
-					>
-						<div className='form-group text-center mb-3'>
-							<Upload
-								action={`http://localhost:8000/product/${productId}/image`}
-								name='images'
-								listType='picture-card'
-								fileList={fileList}
-								onPreview={handlePreview}
-								onChange={handleChange}
-								onRemove={handleRemove}
-								headers={{
-									Authorization: `Bearer ${Cookies.get('token')}`,
-								}}
-							>
-								{fileList.length >= 8 ? null : uploadButton}
-							</Upload>
-							<Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
-								<img
-									alt='example'
+	if (session !== '')
+		return (
+			<div className='container'>
+				<div className='row justify-content-center'>
+					<div className='col-md-6'>
+						<Form
+							name='dynamic_form_nest_item'
+							style={{ maxWidth: 600 }}
+							autoComplete='off'
+							initialValues={initialValues}
+							onFinish={onFinish}
+						>
+							<div className='form-group text-center mb-3'>
+								<Upload
+									action={`http://localhost:8000/product/${productId}/image`}
+									name='images'
+									listType='picture-card'
+									fileList={fileList}
+									onPreview={handlePreview}
+									onChange={handleChange}
+									onRemove={handleRemove}
+									headers={{
+										Authorization: `Bearer ${Cookies.get('token')}`,
+									}}
+								>
+									{fileList.length >= 8 ? null : uploadButton}
+								</Upload>
+								<Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+									<img
+										alt='example'
+										style={{
+											width: '100%',
+										}}
+										src={previewImage}
+									/>
+								</Modal>
+								<label htmlFor='name'>Категория</label>
+								<TreeSelect
+									showSearch
 									style={{
 										width: '100%',
 									}}
-									src={previewImage}
+									value={categoryValue}
+									dropdownStyle={{
+										maxHeight: 400,
+										overflow: 'auto',
+									}}
+									placeholder='Пожалуйста, выберите категорию'
+									allowClear
+									treeDefaultExpandAll
+									onChange={onCategoryChange}
+									treeData={category}
 								/>
-							</Modal>
-							<label htmlFor='name'>Категория</label>
-							<TreeSelect
-								showSearch
-								style={{
-									width: '100%',
-								}}
-								value={categoryValue}
-								dropdownStyle={{
-									maxHeight: 400,
-									overflow: 'auto',
-								}}
-								placeholder='Пожалуйста, выберите категорию'
-								allowClear
-								treeDefaultExpandAll
-								onChange={onCategoryChange}
-								treeData={category}
-							/>
-							<label htmlFor='name'>Город</label>
-							<Select
-								showSearch
-								placeholder='Выберите город'
-								defaultValue={productCity}
-								onChange={handleCityChange}
-								style={{ width: '100%' }}
-								options={cities}
-							></Select>
-							<label htmlFor='name'>Название</label>
-							<Input
-								type='text'
-								className='form-control'
-								id='name'
-								value={name}
-								onChange={handleNameChange}
-							/>
-						</div>
-						<div className='row'>
-							<label className='next__step mb-2'>Характеристики:</label>
-
-							<Form.List name='features'>
-								{(fields, { add, remove }) => (
-									<>
-										{fields.map(({ key, name, ...restField }, index) => {
-											const feature = initialValues.features[index] || { name: '', value: '' }
-											return (
-												<Space
-													key={key}
-													style={{
-														display: 'flex',
-														marginBottom: 8,
-														justifyContent: 'center',
-													}}
-													align='baseline'
-													className={key === 0 ? 'pt-3' : ''}
-												>
-													<Form.Item
-														{...restField}
-														name={[name, 'name']}
-														rules={[
-															{
-																required: true,
-																message: 'Введите параметр',
-															},
-														]}
-													>
-														<Input placeholder='Введите параметр' />
-													</Form.Item>
-													<Form.Item
-														{...restField}
-														name={[name, 'value']}
-														rules={[
-															{
-																required: true,
-																message: 'Введите характеристику',
-															},
-														]}
-													>
-														<Input placeholder='Введите характеристику' />
-													</Form.Item>
-													<MinusCircleOutlined onClick={() => remove(name)} />
-												</Space>
-											)
-										})}
-										<Form.Item>
-											<Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />}>
-												Добавить характеристику
-											</Button>
-										</Form.Item>
-									</>
-								)}
-							</Form.List>
-						</div>
-						<div className='form-group text-center mb-3'>
-							<label htmlFor='description'>Описание</label>
-							<TextArea
-								name='description'
-								value={description}
-								onChange={handleDescriptionChange}
-								placeholder='Введите описание'
-								className='form-control'
-								maxLength={1000}
-							/>
-						</div>
-						<div className='form-group text-center mb-3 price__group'>
-							<label htmlFor='price'>Цена</label>
-							<Space.Compact className='mt-2'>
-								<InputNumber
-									id='price'
-									placeholder='Введите стоимость'
-									value={price}
-									onChange={handlePriceChange}
-									style={{ width: '200px' }}
-								/>
+								<label htmlFor='name'>Город</label>
 								<Select
-									value={selectedValue}
-									defaultValue={'N'}
-									onChange={onSelectChange}
-									options={options}
-									style={{ width: '125px' }}
+									showSearch
+									placeholder='Выберите город'
+									defaultValue={productCity}
+									onChange={handleCityChange}
+									style={{ width: '100%' }}
+									options={cities}
+								></Select>
+								<label htmlFor='name'>Название</label>
+								<Input
+									type='text'
+									className='form-control'
+									id='name'
+									value={name}
+									onChange={handleNameChange}
 								/>
-							</Space.Compact>
-							<Checkbox checked={checked} onChange={handleCheckChange} className='mt-2'>
-								Это начальная стоимость
-							</Checkbox>
-						</div>
-						<Form.Item>
-							<div className='form-group text-center'>
-								<Button type='primary' htmlType='submit'>
-									Изменить
-								</Button>
 							</div>
-						</Form.Item>
-					</Form>
+							<div className='row'>
+								<label className='next__step mb-2'>Характеристики:</label>
+
+								<Form.List name='features'>
+									{(fields, { add, remove }) => (
+										<>
+											{fields.map(({ key, name, ...restField }, index) => {
+												const feature = initialValues.features[index] || { name: '', value: '' }
+												return (
+													<Space
+														key={key}
+														style={{
+															display: 'flex',
+															marginBottom: 8,
+															justifyContent: 'center',
+														}}
+														align='baseline'
+														className={key === 0 ? 'pt-3' : ''}
+													>
+														<Form.Item
+															{...restField}
+															name={[name, 'name']}
+															rules={[
+																{
+																	required: true,
+																	message: 'Введите параметр',
+																},
+															]}
+														>
+															<Input placeholder='Введите параметр' />
+														</Form.Item>
+														<Form.Item
+															{...restField}
+															name={[name, 'value']}
+															rules={[
+																{
+																	required: true,
+																	message: 'Введите характеристику',
+																},
+															]}
+														>
+															<Input placeholder='Введите характеристику' />
+														</Form.Item>
+														<MinusCircleOutlined onClick={() => remove(name)} />
+													</Space>
+												)
+											})}
+											<Form.Item>
+												<Button
+													type='dashed'
+													onClick={() => add()}
+													block
+													icon={<PlusOutlined />}
+												>
+													Добавить характеристику
+												</Button>
+											</Form.Item>
+										</>
+									)}
+								</Form.List>
+							</div>
+							<div className='form-group text-center mb-3'>
+								<label htmlFor='description'>Описание</label>
+								<TextArea
+									name='description'
+									value={description}
+									onChange={handleDescriptionChange}
+									placeholder='Введите описание'
+									className='form-control'
+									maxLength={1000}
+								/>
+							</div>
+							<div className='form-group text-center mb-3 price__group'>
+								<label htmlFor='price'>Цена</label>
+								<Space.Compact className='mt-2'>
+									<InputNumber
+										id='price'
+										placeholder='Введите стоимость'
+										value={price}
+										onChange={handlePriceChange}
+										style={{ width: '200px' }}
+									/>
+									<Select
+										value={selectedValue}
+										defaultValue={'N'}
+										onChange={onSelectChange}
+										options={options}
+										style={{ width: '125px' }}
+									/>
+								</Space.Compact>
+								<Checkbox checked={checked} onChange={handleCheckChange} className='mt-2'>
+									Это начальная стоимость
+								</Checkbox>
+							</div>
+							<Form.Item>
+								<div className='form-group text-center'>
+									<Button type='primary' htmlType='submit'>
+										Изменить
+									</Button>
+								</div>
+							</Form.Item>
+						</Form>
+					</div>
 				</div>
 			</div>
-		</div>
-	)
+		)
+	else
+		return (
+			<div className='container'>
+				<div className='error__label'>
+					<h3>Авторизируйтесь для доступа к этой странице.</h3>
+				</div>
+			</div>
+		)
 }
 
 export default EditProductPage

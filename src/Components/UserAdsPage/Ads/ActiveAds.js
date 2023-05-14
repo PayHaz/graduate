@@ -4,7 +4,6 @@ import { Dropdown, Button, Modal } from 'antd'
 import '../UserAdsPage.css'
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 
 const contentStyle = {
 	height: '270px',
@@ -96,7 +95,7 @@ const ActiveAds = () => {
 
 	const card = data.map((el, index) => {
 		return (
-			<div className='col' key={index}>
+			<div className='col pt-4' key={index}>
 				<div className='card  h-100'>
 					<img style={contentStyle} src={`http://localhost:8000${el.images[0].img}`} />
 					<div className='card-body'>

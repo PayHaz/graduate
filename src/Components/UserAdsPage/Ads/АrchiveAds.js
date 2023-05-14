@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
 
 const contentStyle = {
-	height: '230px',
+	height: '270px',
 	width: '100%',
 }
 
@@ -121,7 +121,7 @@ const АrchiveAds = () => {
 
 	const card = data.map((el, index) => {
 		return (
-			<div className='col' key={index}>
+			<div className='col pt-4' key={index}>
 				<div className='card  h-100'>
 					<img style={contentStyle} src={`http://localhost:8000${el.images[0].img}`} />
 					<div className='card-body'>

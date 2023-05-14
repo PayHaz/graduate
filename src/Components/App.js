@@ -12,6 +12,7 @@ import { ConfigProvider } from 'antd'
 import SearchPage from './SearchPage/SearchPage'
 import CategoryPage from './CategoryPage/CategoryPage'
 import EditProductPage from './EditProductPage/EditProductPage'
+import FavoritePage from './FavoritePage/FavoritePage'
 
 const App = () => {
 	return (
@@ -35,6 +36,7 @@ const App = () => {
 							<Route path='search/:params' element={<SearchPage />} />
 							<Route path='category/:params' element={<CategoryPage />} />
 							<Route path='edit/product/:productId' element={<EditProductPage />} />
+							<Route path='favorite' element={<FavoritePage />} />
 						</Route>
 					</Routes>
 				</Provider>

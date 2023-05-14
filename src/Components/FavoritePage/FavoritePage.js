@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react'
 import { Carousel } from 'antd'
 import { useSelector } from 'react-redux'
-import './carousel.css'
 import Cookies from 'js-cookie'
+import { useDispatch } from 'react-redux'
+import { setToken } from '../../features/session/sessionSlice'
 import Heart from 'react-heart'
 
 const contentStyle = {
@@ -11,7 +12,7 @@ const contentStyle = {
 	width: '100%',
 }
 
-const Cards = () => {
+const FavoritePage = () => {
 	const [allCards, setAllCards] = useState([])
 	const city = useSelector((state) => state.city.value)
 
@@ -22,11 +23,11 @@ const Cards = () => {
 			if (Cookies.get('token')) {
 				headers.Authorization = `Bearer ${Cookies.get('token')}`
 			}
-			const response = await fetch(`http://127.0.0.1:8000/product?status=AC${cookie ? `&city=${cookie}` : ''}`, {
+			const response = await fetch(`http://127.0.0.1:8000/api/user/`, {
 				headers,
 			})
 			const data = await response.json()
-			setAllCards(data)
+			setAllCards(data.favorites)
 		} catch (error) {
 			console.log(error)
 		}
@@ -34,6 +35,7 @@ const Cards = () => {
 
 	useEffect(() => {
 		fetchData()
+		if (session) fetchData()
 	}, [city])
 
 	const productImages = (images) => {
@@ -81,7 +83,7 @@ const Cards = () => {
 		)
 	}
 
-	const card = allCards.map((el, index) => {
+	const card = allCards?.map((el, index) => {
 		return (
 			<div className='col pt-3' key={index}>
 				<div className='card  h-100'>
@@ -117,13 +119,31 @@ const Cards = () => {
 		return <h3>К сожалению, в вашем городе ещё нет объявлений.</h3>
 	}
 
-	return (
-		<div className='container px-4 pb-5 pt-4'>
-			<div className={allCards.length ? 'row  row-cols-1 row-cols-lg-3 col-md-auto' : 'empty__title'}>
-				{allCards.length ? card : onEmptyCity()}
+	const dispatch = useDispatch()
+
+	if (Cookies.get('token') !== undefined) {
+		dispatch(setToken(Cookies.get('token')))
+	}
+
+	const session = useSelector((state) => state.session.value)
+
+	if (session !== '')
+		return (
+			<div className='container px-4 pb-5 pt-4'>
+				<h2>Избранные объявления</h2>
+				<div className={allCards.length ? 'row  row-cols-1 row-cols-lg-3 col-md-auto' : 'empty__title'}>
+					{allCards.length ? card : onEmptyCity()}
+				</div>
 			</div>
-		</div>
-	)
+		)
+	else
+		return (
+			<div className='container'>
+				<div className='error__label'>
+					<h3>Авторизируйтесь для доступа к этой странице.</h3>
+				</div>
+			</div>
+		)
 }
 
-export default Cards
+export default FavoritePage
