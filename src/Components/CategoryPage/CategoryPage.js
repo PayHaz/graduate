@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { Carousel, Pagination } from 'antd'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Cookies from 'js-cookie'
 
 const contentStyle = {
@@ -67,7 +68,10 @@ const CategoryPage = () => {
 					</a>
 				</div>
 			)
-		} else parentCategory = el.title
+		} else {
+			parentCategory = el.title
+			return null
+		}
 	})
 
 	const productImages = (images) => {

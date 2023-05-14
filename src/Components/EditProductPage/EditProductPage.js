@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { Input, Button, Space, Select, InputNumber, Checkbox, Upload, Modal } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
@@ -351,7 +352,7 @@ const EditProductPage = () => {
 									{(fields, { add, remove }) => (
 										<>
 											{fields.map(({ key, name, ...restField }, index) => {
-												const feature = initialValues.features[index] || { name: '', value: '' }
+												//const feature = initialValues.features[index] || { name: '', value: '' }
 												return (
 													<Space
 														key={key}
