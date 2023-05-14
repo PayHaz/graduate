@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { TreeSelect, Slider, Button, Form, Carousel, Pagination } from 'antd'
 import { useParams } from 'react-router-dom'
@@ -40,6 +42,7 @@ const SearchPage = () => {
 				if (el.min_price < minPrice) setMinPrice(el.min_price)
 
 				if (el.max_price > maxPrice) setMaxPrice(el.max_price)
+				return el
 			})
 			setCards(responseData)
 		} catch (error) {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import { Carousel } from 'antd'
@@ -17,7 +18,6 @@ const FavoritePage = () => {
 	const city = useSelector((state) => state.city.value)
 
 	const fetchData = async () => {
-		const cookie = Cookies.get('city_id')
 		try {
 			const headers = {}
 			if (Cookies.get('token')) {
