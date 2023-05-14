@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useCallback } from 'react'
-import { AutoComplete, Input, Form, Button, Select, Modal, Space, Pagination } from 'antd'
+import { AutoComplete, Input, Form, Button, Select, Modal, Space } from 'antd'
 import { useState } from 'react'
 import './AppHeader.css'
 import { useDispatch } from 'react-redux'
