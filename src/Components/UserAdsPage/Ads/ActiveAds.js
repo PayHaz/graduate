@@ -12,13 +12,15 @@ const contentStyle = {
 	width: '100%',
 }
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const ActiveAds = () => {
 	const [data, setData] = useState([])
 	const adsTab = useSelector((state) => state.myAds.value)
 
 	async function fetchData() {
 		try {
-			const response = await fetch('http://127.0.0.1:8000/product?status=AC&own=false', {
+			const response = await fetch(`${backendAPI}/product?status=AC&own=false`, {
 				headers: {
 					Authorization: `Bearer ${Cookies.get('token')}`,
 				},
@@ -31,7 +33,7 @@ const ActiveAds = () => {
 	}
 
 	async function changeProductStatus(id) {
-		const response = await fetch(`http://127.0.0.1:8000/product/${id}/`, {
+		const response = await fetch(`${backendAPI}/product/${id}/`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -79,7 +81,7 @@ const ActiveAds = () => {
 		}
 		if (key === '2') {
 			if (key === '2') {
-				window.location.href = `http://localhost:3000/edit/product/${selectedItem}`
+				window.location.href = `/edit/product/${selectedItem}`
 			}
 		}
 	}
@@ -99,11 +101,11 @@ const ActiveAds = () => {
 		return (
 			<div className='col pt-4' key={index}>
 				<div className='card  h-100'>
-					<img style={contentStyle} src={`http://localhost:8000${el.images[0].img}`} />
+					<img style={contentStyle} src={`${backendAPI}${el.images[0].img}`} />
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>
-								<a href={`http://localhost:3000/product/${el.id}`} className='card__title'>
+								<a href={`/product/${el.id}`} className='card__title'>
 									{el.name}
 								</a>
 							</h5>

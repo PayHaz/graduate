@@ -3,6 +3,8 @@ import { Form, Input, Button, Space, Select, InputNumber } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { Checkbox } from 'antd'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const options = [
 	{
 		value: 'N',
@@ -47,7 +49,7 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch('http://127.0.0.1:8000/city')
+			const response = await fetch(`${backendAPI}/city`)
 			const responseData = await response.json()
 			const formatedData = responseData.map((obj) => ({
 				value: obj.id,

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Form, Button, TreeSelect } from 'antd'
 import './AddItemPage.css'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const FirstStep = ({ formCategory, onFinish }) => {
 	const [data, setData] = useState()
 	const [value, setValue] = useState()
@@ -11,7 +13,7 @@ const FirstStep = ({ formCategory, onFinish }) => {
 
 	async function fetchData() {
 		try {
-			const response = await fetch('http://localhost:8000/category/tree')
+			const response = await fetch(`${backendAPI}/category/tree`)
 			const responseData = await response.json()
 			setData(responseData)
 		} catch (error) {

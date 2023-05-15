@@ -44,6 +44,8 @@ const options = [
 	},
 ]
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader()
@@ -79,7 +81,7 @@ const EditProductPage = () => {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch('http://127.0.0.1:8000/city')
+			const response = await fetch(`${backendAPI}/city`)
 			const responseData = await response.json()
 			const formatedData = responseData.map((obj) => ({
 				value: obj.id,
@@ -100,7 +102,7 @@ const EditProductPage = () => {
 
 	async function fetchProduct() {
 		try {
-			const response = await fetch(`http://localhost:8000/product/${productId}`, {
+			const response = await fetch(`${backendAPI}/product/${productId}`, {
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${Cookies.get('token')}`,
@@ -123,7 +125,7 @@ const EditProductPage = () => {
 					uid: -index,
 					name: `image-${index}.png`,
 					status: 'done',
-					url: 'http://localhost:8000' + image.img,
+					url: `${backendAPI}` + image.img,
 				}))
 				setFileList(images)
 			} else {
@@ -137,7 +139,7 @@ const EditProductPage = () => {
 
 	async function fetchCategory() {
 		try {
-			const response = await fetch('http://localhost:8000/category/tree')
+			const response = await fetch(`${backendAPI}/category/tree`)
 			const responseData = await response.json()
 			setCategory(responseData)
 		} catch (error) {
@@ -194,7 +196,7 @@ const EditProductPage = () => {
 	}
 
 	const handleUpdateClick = () => {
-		fetch(`http://localhost:8000/product/${productId}/`, {
+		fetch(`${backendAPI}/product/${productId}/`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json',
@@ -244,7 +246,7 @@ const EditProductPage = () => {
 
 	const handleRemove = (file) => {
 		const product_id = productId
-		fetch(`http://localhost:8000/products/${product_id}/images/${file.id}/`, {
+		fetch(`${backendAPI}/products/${product_id}/images/${file.id}/`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json',
@@ -288,7 +290,7 @@ const EditProductPage = () => {
 						>
 							<div className='form-group text-center mb-3'>
 								<Upload
-									action={`http://localhost:8000/product/${productId}/image`}
+									action={`${backendAPI}/product/${productId}/image`}
 									name='images'
 									listType='picture-card'
 									fileList={fileList}
