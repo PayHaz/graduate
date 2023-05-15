@@ -49,7 +49,7 @@ const LowerHeader = () => {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch('http://127.0.0.1:8000/city', {
+			const response = await fetch('http://194.67.74.221:8000/city', {
 				headers: {
 					'x-city-id': Cookies.get('city_id'),
 				},
