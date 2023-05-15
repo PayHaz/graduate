@@ -5,6 +5,8 @@ import './ProductPage.css'
 import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loader
 import { Carousel } from 'react-responsive-carousel'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const ProductPage = () => {
 	const [product, setProduct] = useState(null)
 	const [numberVisible, setNumberVisible] = useState(false)
@@ -15,7 +17,7 @@ const ProductPage = () => {
 	}
 
 	useEffect(() => {
-		fetch(`http://localhost:8000/product/${id}`)
+		fetch(`${backendAPI}/product/${id}`)
 			.then((response) => response.json())
 			.then((data) => setProduct(data))
 			.catch((error) => console.log(error))
@@ -58,8 +60,8 @@ const ProductPage = () => {
 						<div className='outer'>
 							<Carousel showStatus={false} showIndicators={false} width={800}>
 								{product.images.map((image) => (
-									<div key={`http://localhost:8000${image.img}`}>
-										<img src={`http://localhost:8000${image.img}`} />
+									<div key={`${backendAPI}${image.img}`}>
+										<img src={`${backendAPI}${image.img}`} />
 									</div>
 								))}
 							</Carousel>
