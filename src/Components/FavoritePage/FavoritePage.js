@@ -13,6 +13,8 @@ const contentStyle = {
 	width: '100%',
 }
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const FavoritePage = () => {
 	const [allCards, setAllCards] = useState([])
 	const city = useSelector((state) => state.city.value)
@@ -23,7 +25,7 @@ const FavoritePage = () => {
 			if (Cookies.get('token')) {
 				headers.Authorization = `Bearer ${Cookies.get('token')}`
 			}
-			const response = await fetch(`http://127.0.0.1:8000/api/user/`, {
+			const response = await fetch(`${backendAPI}/api/user/`, {
 				headers,
 			})
 			const data = await response.json()
@@ -41,7 +43,7 @@ const FavoritePage = () => {
 	const productImages = (images) => {
 		return images.map((image) => (
 			<div key={image.id}>
-				<img style={contentStyle} src={`http://localhost:8000${image.img}`} />
+				<img style={contentStyle} src={`${backendAPI}${image.img}`} />
 			</div>
 		))
 	}
@@ -58,7 +60,7 @@ const FavoritePage = () => {
 		})
 		setAllCards(updatedCards)
 		try {
-			const response = await fetch(`http://localhost:8000/product/${id}/favorite/`, {
+			const response = await fetch(`${backendAPI}/product/${id}/favorite/`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
