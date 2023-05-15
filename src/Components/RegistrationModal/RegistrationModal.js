@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Modal, Form, Input, Button, message } from 'antd'
 import { MaskedInput } from 'antd-mask-input'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const RegistrationModal = ({ open, handleOk, handleCancel }) => {
 	const [form] = Form.useForm()
 	const [loading, setLoading] = useState(false)
@@ -14,7 +16,7 @@ const RegistrationModal = ({ open, handleOk, handleCancel }) => {
 			phone: values.phone.replace(/[+()-]/g, ''),
 		}
 		console.log(datas)
-		const response = await fetch('http://localhost:8000/api/auth/register/', {
+		const response = await fetch(`${backendAPI}/api/auth/register/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

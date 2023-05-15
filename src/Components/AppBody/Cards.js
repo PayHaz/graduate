@@ -11,6 +11,8 @@ const contentStyle = {
 	width: '100%',
 }
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const Cards = () => {
 	const [allCards, setAllCards] = useState([])
 	const city = useSelector((state) => state.city.value)
@@ -22,12 +24,9 @@ const Cards = () => {
 			if (Cookies.get('token')) {
 				headers.Authorization = `Bearer ${Cookies.get('token')}`
 			}
-			const response = await fetch(
-				`http://194.67.74.221:8000/product?status=AC${cookie ? `&city=${cookie}` : ''}`,
-				{
-					headers,
-				}
-			)
+			const response = await fetch(`${backendAPI}/product?status=AC${cookie ? `&city=${cookie}` : ''}`, {
+				headers,
+			})
 			const data = await response.json()
 			setAllCards(data)
 		} catch (error) {
@@ -42,7 +41,7 @@ const Cards = () => {
 	const productImages = (images) => {
 		return images.map((image) => (
 			<div key={image.id}>
-				<img style={contentStyle} src={`http://194.67.74.221:8000${image.img}`} />
+				<img style={contentStyle} src={`${backendAPI}${image.img}`} />
 			</div>
 		))
 	}
@@ -59,7 +58,7 @@ const Cards = () => {
 		})
 		setAllCards(updatedCards)
 		try {
-			const response = await fetch(`http://194.67.74.221:8000/product/${id}/favorite/`, {
+			const response = await fetch(`${backendAPI}/product/${id}/favorite/`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -94,7 +93,7 @@ const Cards = () => {
 
 					<div className='card-body'>
 						<h5 className='card-title'>
-							<a href={`http://194.67.74.221:8000/product/${el.id}`} className='card__title'>
+							<a href={`/product/${el.id}`} className='card__title'>
 								{el.name}
 							</a>
 						</h5>

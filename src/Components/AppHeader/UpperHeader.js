@@ -11,13 +11,15 @@ import { useDispatch } from 'react-redux'
 import Cookies from 'js-cookie'
 import { deleteToken } from '../../features/session/sessionSlice'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const { useToken } = theme
 
 const items = [
 	{
 		key: '1',
 		label: (
-			<a rel='noopener noreferrer' href='http://localhost:3000/ads'>
+			<a rel='noopener noreferrer' href='/ads'>
 				Мои объявления
 			</a>
 		),
@@ -54,7 +56,7 @@ const UpperHeader = () => {
 	}
 
 	const getUserData = async (token) => {
-		const response = await fetch('http://localhost:8000/api/user/', {
+		const response = await fetch(`${backendAPI}/api/user/`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Bearer ${token}`,

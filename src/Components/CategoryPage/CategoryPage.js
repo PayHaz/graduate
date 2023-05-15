@@ -11,6 +11,8 @@ const contentStyle = {
 	width: '100%',
 }
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const CategoryPage = () => {
 	const [cards, setCards] = useState([])
 	const [currentPage, setCurrentPage] = useState(1)
@@ -25,7 +27,7 @@ const CategoryPage = () => {
 
 	async function fetchCategories() {
 		try {
-			const response = await fetch(`http://localhost:8000/category/tree?category=${params}`)
+			const response = await fetch(`${backendAPI}/category/tree?category=${params}`)
 			const responseData = await response.json()
 			setCategory(responseData)
 		} catch (error) {
@@ -36,7 +38,7 @@ const CategoryPage = () => {
 	async function fetchCards() {
 		try {
 			const response = await fetch(
-				`http://localhost:8000/search?category=${params}${
+				`${backendAPI}/search?category=${params}${
 					Cookies.get('city_id') ? '&city=' + Cookies.get('city_id') : ''
 				}`
 			)
@@ -63,7 +65,7 @@ const CategoryPage = () => {
 		if (el.value !== parseInt(params)) {
 			return (
 				<div key={el.value} className={el.value > 7 ? 'col category pt-2' : 'col category'}>
-					<a className='category__element' href={`http://localhost:3000/category/${el.value}`}>
+					<a className='category__element' href={`/category/${el.value}`}>
 						{el.title}
 					</a>
 				</div>
@@ -77,7 +79,7 @@ const CategoryPage = () => {
 	const productImages = (images) => {
 		return images.map((image, index) => (
 			<div key={index}>
-				<img style={contentStyle} src={`http://localhost:8000${image.img}`} />
+				<img style={contentStyle} src={`${backendAPI}${image.img}`} />
 			</div>
 		))
 	}
@@ -92,7 +94,7 @@ const CategoryPage = () => {
 
 					<div className='card-body'>
 						<h5 className='card-title'>
-							<a href={`http://localhost:3000/product/${el.id}`} className='card__title'>
+							<a href={`/product/${el.id}`} className='card__title'>
 								{el.name}
 							</a>
 						</h5>

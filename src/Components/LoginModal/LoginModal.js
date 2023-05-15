@@ -11,6 +11,8 @@ import Cookies from 'js-cookie'
 
 const { Text } = Typography
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const LoginModal = ({ open, handleOk, handleCancel }) => {
 	const [form] = Form.useForm()
 	const dispatch = useDispatch()
@@ -25,7 +27,7 @@ const LoginModal = ({ open, handleOk, handleCancel }) => {
 
 	const onFinish = async (values) => {
 		setLoading(true)
-		const response = await fetch('http://localhost:8000/api/token/', {
+		const response = await fetch(`${backendAPI}/api/token/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

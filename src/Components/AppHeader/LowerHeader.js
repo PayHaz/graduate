@@ -9,9 +9,11 @@ import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { setCity } from '../../features/city/citySlice'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const searchResult = async (query) => {
 	const response = await fetch(
-		`http://localhost:8000/search/?name=${query}${Cookies.get('city_id') ? '&city=' + Cookies.get('city_id') : ''}`
+		`${backendAPI}/search/?name=${query}${Cookies.get('city_id') ? '&city=' + Cookies.get('city_id') : ''}`
 	)
 	const data = await response.json()
 	return data.map((product) => ({
@@ -25,7 +27,7 @@ const searchResult = async (query) => {
 				}}
 			>
 				<span>
-					<a href={`http://localhost:3000/product/${product.id}`} target='_blank' rel='noopener noreferrer'>
+					<a href={`/product/${product.id}`} target='_blank' rel='noopener noreferrer'>
 						{product.name}
 					</a>
 				</span>
@@ -49,7 +51,7 @@ const LowerHeader = () => {
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch('http://194.67.74.221:8000/city', {
+			const response = await fetch(`${backendAPI}/city`, {
 				headers: {
 					'x-city-id': Cookies.get('city_id'),
 				},
@@ -147,7 +149,7 @@ const LowerHeader = () => {
 						>
 							<Space.Compact style={{ width: '100%' }}>
 								<Input size='large' placeholder='Поиск по объявлениям' />
-								<Link to={`http://localhost:3000/search/${searchInput}`}>
+								<Link to={`/search/${searchInput}`}>
 									<Button type='primary'>Найти</Button>
 								</Link>
 							</Space.Compact>

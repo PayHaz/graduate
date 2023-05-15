@@ -9,6 +9,8 @@ import Cookies from 'js-cookie'
 import { setToken } from '../../features/session/sessionSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const getBase64 = (file) =>
 	new Promise((resolve, reject) => {
 		const reader = new FileReader()
@@ -77,7 +79,7 @@ const AddItemPage = () => {
 
 	const fetchData = async () => {
 		if (current === 2) {
-			const response = await fetch('http://localhost:8000/product', {
+			const response = await fetch(`${backendAPI}/product`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -175,7 +177,7 @@ const AddItemPage = () => {
 					<h3>Загрузите фотографии:</h3>
 					<div>
 						<Upload
-							action={`http://localhost:8000/product/${uploadProduct}/image`}
+							action={`${backendAPI}/product/${uploadProduct}/image`}
 							name='images'
 							listType='picture-card'
 							fileList={fileList}
