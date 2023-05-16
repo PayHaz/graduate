@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react'
 import './carousel.css'
 
+const backendAPI = 'http://194.67.74.221:8000'
+
 const Category = () => {
 	const [categories, setCategories] = useState([])
 
 	const fetchData = async () => {
 		try {
-			const response = await fetch('http://127.0.0.1:8000/category')
+			const response = await fetch(`${backendAPI}/category`)
 			const responseData = await response.json()
 			const formatedData = responseData.map((obj) => ({
 				value: obj.id,
@@ -27,7 +29,7 @@ const Category = () => {
 	const Cat = categories.map((el) => {
 		return (
 			<div key={el.value} className={el.value > 7 ? 'col category pt-4' : 'col category'}>
-				<a className='category__element' href={`http://localhost:3000/category/${el.value}`}>
+				<a className='category__element' href={`/category/${el.value}`}>
 					{el.label}
 				</a>
 			</div>
