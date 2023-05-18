@@ -119,7 +119,10 @@ const EditProductPage = () => {
 				setChecked(data.is_lower_bound)
 				const features = data.features.map((item) => ({ name: item.name, value: item.value }))
 				setInitialValues({ features: features })
-				setSelectedValue(data.price_suffix)
+				const selectedOption = options.find((option) => option.label === data.price_suffix)
+				if (selectedOption) {
+					setSelectedValue(selectedOption.value)
+				}
 				const images = data.images.map((image, index) => ({
 					id: image.id,
 					uid: -index,
