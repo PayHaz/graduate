@@ -76,23 +76,25 @@ const ProductPage = () => {
 						</button>
 					</div>
 				</div>
-				<h3>Характеристики</h3>
-				<div className='col-lg-8'>
-					<div className='row'>
-						<div className='col-lg-6'>
-							<p>Год выпуска: 2023</p>
-						</div>
-						<div className='col-lg-6'>
-							<p>Привод: Передний</p>
-						</div>
-						<div className='col-lg-6'>
-							<p>Состояние: Не битый</p>
-						</div>
-						<div className='col-lg-6'>
-							<p>Цвет: Чёрный</p>
+				{product.features.length > 0 ? (
+					<div>
+						<h3>Характеристики</h3>
+						<div className='col-lg-8'>
+							<div className='row'>
+								{product.features.map((feature) => (
+									<div className='col-lg-6' key={feature.name}>
+										<p>
+											{feature.name}: {feature.value}
+										</p>
+									</div>
+								))}
+							</div>
 						</div>
 					</div>
-				</div>
+				) : (
+					''
+				)}
+
 				<h3>Описание</h3>
 
 				<div className='col-lg-8'>

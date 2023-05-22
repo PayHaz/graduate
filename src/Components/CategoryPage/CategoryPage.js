@@ -113,6 +113,14 @@ const CategoryPage = () => {
 		)
 	})
 
+	const onEmptyCards = () => {
+		return (
+			<div className='d-flex justify-content-center'>
+				<h1>К сожалению, тут ещё пусто.</h1>
+			</div>
+		)
+	}
+
 	return (
 		<>
 			<div className='container'>
@@ -121,7 +129,11 @@ const CategoryPage = () => {
 						<div className='px-4'>
 							<div className='row row-cols-lg-5 cat pt-3 d-flex justify-content-center'>{Cat}</div>
 							<h3 className='pt-4'>Категория: {parentCategory}</h3>
-							<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>{card}</div>
+							{cardsToShow.length > 0 ? (
+								<div className='row  row-cols-1 row-cols-lg-3 col-md-auto '>{card}</div>
+							) : (
+								onEmptyCards()
+							)}
 						</div>
 						<Pagination
 							current={currentPage}
