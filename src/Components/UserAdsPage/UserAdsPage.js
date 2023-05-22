@@ -2,6 +2,7 @@ import React from 'react'
 import { Tabs } from 'antd'
 import ActiveAds from './Ads/ActiveAds'
 import АrchiveAds from './Ads/АrchiveAds'
+import OnModerateAds from './Ads/OnModerateAds'
 import Cookies from 'js-cookie'
 import { setToken } from '../../features/session/sessionSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,6 +18,11 @@ const items = [
 		key: '2',
 		label: `Архив`,
 		children: <АrchiveAds />,
+	},
+	{
+		key: '3',
+		label: `На модерации`,
+		children: <OnModerateAds />,
 	},
 ]
 

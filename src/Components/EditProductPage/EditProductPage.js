@@ -214,14 +214,15 @@ const EditProductPage = () => {
 				price_suffix: selectedValue,
 				category: categoryValue,
 				features: formData.features,
+				status: 'MD',
 			}),
 		})
 			.then((response) => {
 				if (response.ok) {
-					message.success('Продукт успешно изменён!')
+					message.success('Продукт успешно изменён и отправлен на модерацию!')
 					return response.json()
 				} else {
-					throw new Error('Failed to update product.')
+					throw new Error('Ошибка!')
 				}
 			})
 			.then((data) => {
