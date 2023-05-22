@@ -331,16 +331,25 @@ const EditProductPage = () => {
 									treeDefaultExpandAll
 									onChange={onCategoryChange}
 									treeData={category}
+									filterTreeNode={(inputValue, treeNode) =>
+										treeNode.title.toLowerCase().includes(inputValue.toLowerCase())
+									}
 								/>
 								<label htmlFor='name'>Город</label>
 								<Select
 									showSearch
 									placeholder='Выберите город'
+									style={{ width: '100%' }}
+									optionFilterProp='children'
 									defaultValue={productCity}
 									onChange={handleCityChange}
-									style={{ width: '100%' }}
-									options={cities}
-								></Select>
+								>
+									{cities.map((city) => (
+										<Select.Option key={city.value} value={city.value}>
+											{city.label}
+										</Select.Option>
+									))}
+								</Select>
 								<label htmlFor='name'>Название</label>
 								<Input
 									type='text'

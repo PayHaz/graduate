@@ -57,6 +57,9 @@ const FirstStep = ({ formCategory, onFinish }) => {
 						treeDefaultExpandAll
 						onChange={onChange}
 						treeData={data}
+						filterTreeNode={(inputValue, treeNode) =>
+							treeNode.title.toLowerCase().includes(inputValue.toLowerCase())
+						}
 					/>
 				</Form.Item>
 				<Form.Item className='next__step'>

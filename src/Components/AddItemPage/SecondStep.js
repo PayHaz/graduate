@@ -97,7 +97,18 @@ const SecondStep = ({ formInform, onFinish, current, formData, steps, prev }) =>
 					label='Город:'
 					rules={[{ required: true, message: 'Пожалуйста, выберите город' }]}
 				>
-					<Select showSearch placeholder='Выберите город' style={{ width: '100%' }} options={cities}></Select>
+					<Select
+						showSearch
+						placeholder='Выберите город'
+						style={{ width: '100%' }}
+						optionFilterProp='children'
+					>
+						{cities.map((city) => (
+							<Select.Option key={city.value} value={city.value}>
+								{city.label}
+							</Select.Option>
+						))}
+					</Select>
 				</Form.Item>
 				<div className='row'>
 					<label className='next__step mb-2'>Характеристики:</label>
