@@ -130,7 +130,7 @@ const LowerHeader = () => {
 	return (
 		<div className='container'>
 			<header className='py-3 mb-2 mt-1'>
-				<div className='container site-header__middle flex-wrap'>
+				<div className='site-header__middle flex-wrap'>
 					<a
 						href='/'
 						className='d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none'
@@ -138,49 +138,58 @@ const LowerHeader = () => {
 						<img src={RentaruLogo} />
 					</a>
 
-					<Form style={{ display: 'flex', alignItems: 'center' }}>
-						<AutoComplete
-							dropdownMatchSelectWidth={252}
-							className='search_panel'
-							options={options}
-							onSelect={onSelect}
-							onSearch={handleSearch}
-							onChange={onChange}
-						>
-							<Space.Compact style={{ width: '100%' }}>
-								<Input size='large' placeholder='Поиск по объявлениям' />
-								<Link to={`/search/${searchInput}`}>
-									<Button type='primary'>Найти</Button>
-								</Link>
-							</Space.Compact>
-						</AutoComplete>
-						<>
-							<Button type='text' onClick={showModal} style={{ marginLeft: '10px', fontSize: '17px' }}>
-								<i
-									className='fa fa-map-marker'
-									style={{ color: '#00aaff', paddingRight: '5px', fontSize: '24px' }}
-								></i>
-								{selectedCity ? cityName : 'Выберите город'}
-							</Button>
-							<Modal
-								title='Выберите город'
-								open={visible}
-								onOk={handleOk}
-								onCancel={handleCancel}
-								footer={[]}
-							>
-								<Select
-									showSearch
-									placeholder='Выберите город'
-									style={{ width: '100%' }}
-									onChange={handleCitySelect}
-									options={cities}
-									filterOption={(input, option) =>
-										(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-									}
-								></Select>
-							</Modal>
-						</>
+					<Form className='d-flex flex-wrap justify-content-between align-items-center'>
+						<div className='row'>
+							<div className='col'>
+								<AutoComplete
+									dropdownMatchSelectWidth={252}
+									className='search_panel'
+									options={options}
+									onSelect={onSelect}
+									onSearch={handleSearch}
+									onChange={onChange}
+								>
+									<Space.Compact style={{ width: '100%' }}>
+										<Input size='large' placeholder='Поиск по объявлениям' />
+										<Link to={`/search/${searchInput}`}>
+											<Button type='primary'>Найти</Button>
+										</Link>
+									</Space.Compact>
+								</AutoComplete>
+							</div>
+
+							<div className='col '>
+								<Button
+									type='text'
+									onClick={showModal}
+									style={{ marginLeft: '10px', fontSize: '17px' }}
+								>
+									<i
+										className='fa fa-map-marker'
+										style={{ color: '#00aaff', paddingRight: '5px', fontSize: '24px' }}
+									></i>
+									{selectedCity ? cityName : 'Выберите город'}
+								</Button>
+								<Modal
+									title='Выберите город'
+									open={visible}
+									onOk={handleOk}
+									onCancel={handleCancel}
+									footer={[]}
+								>
+									<Select
+										showSearch
+										placeholder='Выберите город'
+										style={{ width: '100%' }}
+										onChange={handleCitySelect}
+										options={cities}
+										filterOption={(input, option) =>
+											(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+										}
+									></Select>
+								</Modal>
+							</div>
+						</div>
 					</Form>
 				</div>
 			</header>
