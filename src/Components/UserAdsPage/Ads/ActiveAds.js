@@ -6,6 +6,7 @@ import { Dropdown, Button, Modal } from 'antd'
 import '../UserAdsPage.css'
 import Cookies from 'js-cookie'
 import { useSelector } from 'react-redux'
+import defaultimg from './img/defaultIamge.avif'
 
 const contentStyle = {
 	height: '270px',
@@ -101,7 +102,10 @@ const ActiveAds = () => {
 		return (
 			<div className='col pt-4' key={index}>
 				<div className='card  h-100'>
-					<img style={contentStyle} src={`${backendAPI}${el.images[0].img}`} />
+					<img
+						style={contentStyle}
+						src={el.images && el.images.length > 0 ? `${backendAPI}${el.images[0].img}` : defaultimg}
+					/>
 					<div className='card-body'>
 						<div className='title__group'>
 							<h5 className='card-title'>
