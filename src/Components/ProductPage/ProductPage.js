@@ -27,14 +27,21 @@ const ProductPage = () => {
 		return <p>Loading...</p>
 	}
 
-	const str = '+7 (912) 536-04-84'
+	const formatPhoneNumber = (phoneNumber) => {
+		const cleaned = ('' + phoneNumber).replace(/\D/g, '')
+		const match = cleaned.match(/^(\d{3})(\d{3})(\d{2})(\d{2})$/)
+		if (match) {
+			return `+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}`
+		}
+		return null
+	}
 
 	const ButtonTelContent = () => {
 		if (numberVisible)
 			return (
 				<div className='row'>
 					<div className='col-12'>
-						<span>{str}</span>
+						<span>{product.author.phone}</span>
 					</div>
 				</div>
 			)
@@ -45,7 +52,7 @@ const ProductPage = () => {
 						<span>Показать телефон</span>
 					</div>
 					<div className='col-12'>
-						<span>{str.substr(0, 8)} XXX-XX-XX</span>
+						<span>{product.author.phone.substr(0, 8)} XXX-XX-XX</span>
 					</div>
 				</div>
 			)
