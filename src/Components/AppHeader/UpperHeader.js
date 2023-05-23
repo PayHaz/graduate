@@ -27,7 +27,7 @@ const items = [
 	{
 		key: '2',
 		label: (
-			<a target='_blank' rel='noopener noreferrer' href='https://www.aliyun.com'>
+			<a target='_blank' rel='noopener noreferrer' href='/edit/user'>
 				Управление профилем
 			</a>
 		),

@@ -13,6 +13,7 @@ import SearchPage from './SearchPage/SearchPage'
 import CategoryPage from './CategoryPage/CategoryPage'
 import EditProductPage from './EditProductPage/EditProductPage'
 import FavoritePage from './FavoritePage/FavoritePage'
+import EditUserPage from './EditUserPage/EditUserPage'
 
 const App = () => {
 	return (
@@ -37,6 +38,7 @@ const App = () => {
 							<Route path='category/:params' element={<CategoryPage />} />
 							<Route path='edit/product/:productId' element={<EditProductPage />} />
 							<Route path='favorite' element={<FavoritePage />} />
+							<Route path='edit/user' element={<EditUserPage />} />
 						</Route>
 					</Routes>
 				</Provider>
