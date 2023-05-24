@@ -160,6 +160,10 @@ const SearchPage = () => {
 										range={{ draggableTrack: true }}
 										onChange={handlePriceRangeChange}
 										defaultValue={[minPrice, maxPrice]}
+										marks={{
+											[minPrice]: `${minPrice}₽`,
+											[maxPrice]: `${maxPrice}₽`,
+										}}
 									/>
 								</Form.Item>
 							</div>
