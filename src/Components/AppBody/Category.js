@@ -28,7 +28,7 @@ const Category = () => {
 
 	const Cat = categories.map((el, index) => {
 		return (
-			<div key={el.value} className={index > 7 ? 'col category pt-4' : 'col category'}>
+			<div key={el.value} className={index > 4 ? 'col category pt-4' : 'col category'}>
 				<a className='category__element' href={`/category/${el.value}`}>
 					{el.label}
 				</a>
