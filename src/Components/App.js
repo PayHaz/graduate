@@ -14,6 +14,7 @@ import CategoryPage from './CategoryPage/CategoryPage'
 import EditProductPage from './EditProductPage/EditProductPage'
 import FavoritePage from './FavoritePage/FavoritePage'
 import EditUserPage from './EditUserPage/EditUserPage'
+import HelpPage from './HelpPage/HelpPage'
 
 const App = () => {
 	return (
@@ -39,6 +40,7 @@ const App = () => {
 							<Route path='edit/product/:productId' element={<EditProductPage />} />
 							<Route path='favorite' element={<FavoritePage />} />
 							<Route path='edit/user' element={<EditUserPage />} />
+							<Route path='help' element={<HelpPage />} />
 						</Route>
 					</Routes>
 				</Provider>

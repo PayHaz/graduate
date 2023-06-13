@@ -7,16 +7,17 @@ const AboutPage = () => {
 	const dispatch = useDispatch()
 
 	return (
-		<div>
-			<div>
-				<button aria-label='Increment value' onClick={() => dispatch(increment())}>
-					Increment
-				</button>
-				<span>{count}</span>
-				<button aria-label='Decrement value' onClick={() => dispatch(decrement())}>
-					Decrement
-				</button>
-			</div>
+		<div className='container'>
+			<p>
+				<strong>О проекте</strong>
+			</p>
+			<p>
+				Данное приложение разработано в качестве дипломной работы студентом 4ого курса НВГУ Ермаковым Вадимом
+				Константиновичем.&nbsp;
+				<br />
+				<br />В стеке технологий используется Django, React, Redux.
+			</p>
+			<p></p>
 		</div>
 	)
 }

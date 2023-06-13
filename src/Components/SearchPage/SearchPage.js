@@ -5,6 +5,7 @@ import { TreeSelect, Slider, Button, Form, Carousel, Pagination } from 'antd'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
+import Heart from 'react-heart'
 import './SerachPage.css'
 
 const contentStyle = {
@@ -28,14 +29,22 @@ const SearchPage = () => {
 	const [priceRange, setPriceRange] = useState(null)
 	const [minPrice, setMinPrice] = useState(999999)
 	const [maxPrice, setMaxPrice] = useState(0)
+	const [allCards, setAllCards] = useState([])
 	const city = useSelector((state) => state.city.value)
 
 	async function fetchCards() {
 		try {
+			const headers = {}
+			if (Cookies.get('token')) {
+				headers.Authorization = `Bearer ${Cookies.get('token')}`
+			}
 			const response = await fetch(
 				`${backendAPI}/search?name=${params}${Cookies.get('city_id') ? '&city=' + Cookies.get('city_id') : ''}${
 					category ? '&category=' + category : ''
-				}${priceRange ? '&minRange=' + priceRange[0] + '&maxRange=' + priceRange[1] : ''}`
+				}${priceRange ? '&minRange=' + priceRange[0] + '&maxRange=' + priceRange[1] : ''}`,
+				{
+					headers,
+				}
 			)
 			const responseData = await response.json()
 			responseData.map((el) => {
@@ -93,6 +102,43 @@ const SearchPage = () => {
 		))
 	}
 
+	const handleClick = async (id) => {
+		const updatedCards = cards.map((el) => {
+			if (el.id === id) {
+				return {
+					...el,
+					is_favorite: !el.is_favorite,
+				}
+			}
+			return el
+		})
+		setCards(updatedCards)
+		try {
+			const response = await fetch(`${backendAPI}/product/${id}/favorite/`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${Cookies.get('token')}`,
+				},
+				body: JSON.stringify({
+					is_favorite: !cards.find((el) => el.id === id).is_favorite,
+				}),
+			})
+			const data = await response.json()
+			console.log(data)
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const heart = (el) => {
+		return (
+			<div style={{ width: '25px' }}>
+				<Heart isActive={el.is_favorite} onClick={() => handleClick(el.id)} />
+			</div>
+		)
+	}
+
 	const card = cardsToShow.map((el, index) => {
 		return (
 			<div className='col pt-3' key={index}>
@@ -115,7 +161,10 @@ const SearchPage = () => {
 							{el.price}
 							{el.price_suffix ? ' ' + el.price_suffix : ''}
 						</p>
-						<p className='card-text card-city'>{el.city_name}</p>
+						<div className='d-flex justify-content-between'>
+							<p className='card-text card-city'>{el.city_name}</p>
+							{Cookies.get('token') ? heart(el) : ''}
+						</div>
 					</div>
 				</div>
 			</div>

@@ -123,7 +123,7 @@ const UpperHeader = () => {
 						<div className='header_selection'>
 							<div className='header_item header_button'>
 								<div className='header-services-menu'>
-									<a href='#'>Помощь</a>
+									<a href='/help'>Помощь</a>
 								</div>
 							</div>
 							<div className='header_item header_button'>
